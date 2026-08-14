@@ -38,6 +38,18 @@ def setup(app: Sphinx) -> dict[str, Any]:
     # deploy`; when non-empty, the generated config injects versions.js /
     # siteinfo.js and a VersionPicker nav entry.
     app.add_config_value("vitepress_deploy_root", "", "html", str)
+    # Repository URL — drives the navbar GitHub icon and, unless
+    # vitepress_edit_link_pattern overrides it, the per-page "Edit this
+    # page" link (whose path is derived by locating the source directory
+    # inside the git working tree).
+    app.add_config_value("vitepress_repo", "", "html", str)
+    app.add_config_value("vitepress_edit_branch", "main", "html", str)
+    app.add_config_value("vitepress_edit_link_pattern", "", "html", str)
+    # Extra HTML shown above the copyright in the site footer.
+    app.add_config_value("vitepress_footer_message", "", "html", str)
+    # Logo and favicon default to Sphinx's own html_logo / html_favicon.
+    app.add_config_value("vitepress_logo", "", "html", str)
+    app.add_config_value("vitepress_favicon", "", "html", str)
 
     return {
         "version": __version__,

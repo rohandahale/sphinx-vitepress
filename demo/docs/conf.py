@@ -25,3 +25,8 @@ else:
     intersphinx_mapping = {"python": ("https://docs.python.org/3", None)}
 
 exclude_patterns = ["_build"]
+
+# sphinx-vitepress: navbar GitHub icon + per-page edit links + footer.
+vitepress_repo = "https://github.com/rohandahale/sphinx-vitepress"
+vitepress_footer_message = "Built with sphinx-vitepress"
+copyright = "2026, Rohan Dahale"

@@ -24,7 +24,56 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
+
+def _json(value: Any, indent: int | None = None) -> str:
+    """JSON for embedding in config.mts — real UTF-8, not \\uXXXX escapes."""
+    return json.dumps(value, indent=indent, ensure_ascii=False)
+
+
 TEMPLATE_DIR = Path(__file__).parent / "template"
+
+
+def _git_relative_srcdir(srcdir: Path) -> str | None:
+    """Path of ``srcdir`` relative to its git working tree, if any.
+
+    Used to build an edit-link pattern that points at the real file in the
+    repository (``docs/`` for a typical layout) without asking the user.
+    """
+    for candidate in [srcdir, *srcdir.parents]:
+        if (candidate / ".git").exists():
+            relative = srcdir.relative_to(candidate).as_posix()
+            return relative if relative != "." else ""
+    return None
+
+
+def _edit_link(builder: VitepressBuilder) -> dict[str, str] | None:
+    config = builder.config
+    pattern = config.vitepress_edit_link_pattern
+    if not pattern:
+        if not config.vitepress_repo:
+            return None
+        relative = _git_relative_srcdir(Path(builder.srcdir).resolve())
+        if relative is None:
+            return None
+        repo = config.vitepress_repo.rstrip("/")
+        prefix = f"{relative}/" if relative else ""
+        pattern = f"{repo}/edit/{config.vitepress_edit_branch}/{prefix}:path"
+    return {"pattern": pattern, "text": "Edit this page on GitHub"}
+
+
+def _copy_asset(builder: VitepressBuilder, setting: str, fallback: str) -> str | None:
+    """Copy a logo/favicon into ``public/`` and return its site-root URL."""
+    name = setting or fallback
+    if not name:
+        return None
+    source = Path(builder.confdir) / name
+    if not source.is_file():
+        logger.warning("sphinx-vitepress: asset not found: %s", source)
+        return None
+    public = Path(builder.outdir) / "public"
+    public.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(source, public / source.name)
+    return f"/{source.name}"
 
 
 def _substitutions(builder: VitepressBuilder) -> dict[str, str]:
@@ -46,14 +95,35 @@ def _substitutions(builder: VitepressBuilder) -> dict[str, str]:
         ]
         nav.append({"component": "VersionPicker"})
 
+    favicon = _copy_asset(builder, config.vitepress_favicon, config.html_favicon or "")
+    if favicon:
+        href = posixpath.join(config.vitepress_base, favicon.lstrip("/"))
+        head.append(["link", {"rel": "icon", "href": href}])
+
+    social_links = []
+    if config.vitepress_repo:
+        social_links.append({"icon": "github", "link": config.vitepress_repo})
+
+    footer: dict[str, str] = {}
+    if config.vitepress_footer_message:
+        footer["message"] = config.vitepress_footer_message
+    if config.copyright:
+        footer["copyright"] = f"Copyright © {config.copyright}"
+
+    logo = _copy_asset(builder, config.vitepress_logo, config.html_logo or "")
+
     return {
-        "__SVP_TITLE__": json.dumps(title),
-        "__SVP_DESCRIPTION__": json.dumps(description),
-        "__SVP_BASE__": json.dumps(config.vitepress_base),
-        "__SVP_HEAD__": json.dumps(head, indent=2),
-        "__SVP_NAV__": json.dumps(nav, indent=2),
-        "__SVP_SIDEBAR__": json.dumps(sidebar, indent=2),
-        "__SVP_DEPLOY_ROOT_VALUE__": json.dumps(deploy_root or config.vitepress_base),
+        "__SVP_TITLE__": _json(title),
+        "__SVP_DESCRIPTION__": _json(description),
+        "__SVP_BASE__": _json(config.vitepress_base),
+        "__SVP_HEAD__": _json(head, indent=2),
+        "__SVP_NAV__": _json(nav, indent=2),
+        "__SVP_SIDEBAR__": _json(sidebar, indent=2),
+        "__SVP_LOGO__": _json(logo),
+        "__SVP_SOCIAL_LINKS__": _json(social_links, indent=2),
+        "__SVP_EDIT_LINK__": _json(_edit_link(builder), indent=2),
+        "__SVP_FOOTER__": _json(footer or None, indent=2),
+        "__SVP_DEPLOY_ROOT_VALUE__": _json(deploy_root or config.vitepress_base),
     }
 
 

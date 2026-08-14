@@ -9,6 +9,7 @@ export default defineConfig({
   description: __SVP_DESCRIPTION__,
   base: __SVP_BASE__,
   cleanUrls: true,
+  lastUpdated: true,
   head: __SVP_HEAD__,
   markdown: { math: true },
   vite: {
@@ -19,9 +20,13 @@ export default defineConfig({
     },
   },
   themeConfig: {
+    logo: __SVP_LOGO__,
     nav: __SVP_NAV__,
     sidebar: __SVP_SIDEBAR__,
-    outline: { level: [2, 3] },
+    socialLinks: __SVP_SOCIAL_LINKS__,
+    editLink: __SVP_EDIT_LINK__,
+    footer: __SVP_FOOTER__,
+    outline: { level: 'deep' },
     search: { provider: 'local', options: { detailedView: true } },
   },
 })

@@ -67,6 +67,45 @@ def test_basic_rst(tmp_path: Path) -> None:
     assert (tmp_path / ".vitepress" / "theme" / "docstrings.css").exists()
 
 
+def test_site_chrome_from_config(tmp_path: Path) -> None:
+    """Repo/footer/logo settings reach themeConfig, and the edit-link path
+    is derived from where the source dir sits in the git working tree."""
+    rc = build_main(
+        [
+            "-b",
+            "vitepress",
+            "-q",
+            str(ROOTS / "test-basic"),
+            str(tmp_path),
+            "-D",
+            "vitepress_repo=https://github.com/example/proj",
+            "-D",
+            "copyright=2026, Example",
+            "-D",
+            "vitepress_footer_message=Built with sphinx-vitepress",
+        ]
+    )
+    assert rc == 0
+    config = (tmp_path / ".vitepress" / "config.mts").read_text(encoding="utf-8")
+
+    assert '"icon": "github"' in config
+    assert '"link": "https://github.com/example/proj"' in config
+    assert "Copyright © 2026, Example" in config
+    assert "Built with sphinx-vitepress" in config
+    # This repo's test root lives at tests/roots/test-basic.
+    assert (
+        '"pattern": "https://github.com/example/proj/edit/main/tests/roots/test-basic/:path"'
+        in config
+    )
+
+
+def test_no_chrome_without_repo(tmp_path: Path) -> None:
+    build("test-basic", tmp_path)
+    config = (tmp_path / ".vitepress" / "config.mts").read_text(encoding="utf-8")
+    assert "socialLinks: []" in config
+    assert "editLink: null" in config, "no repo configured -> no edit link"
+
+
 def test_stale_outputs_refresh_when_version_changes(tmp_path: Path) -> None:
     """Upgrading sphinx-vitepress must rewrite outputs even when the doc
     sources themselves are unchanged (the output FORMAT changed)."""
