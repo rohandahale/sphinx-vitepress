@@ -50,6 +50,12 @@ def test_captions_become_collapsible_sidebar_groups(tmp_path: Path) -> None:
     # An uncaptioned toctree contributes its pages directly.
     assert {"text": "Loose Page", "link": "/loose"} in sidebar
 
+    # `self` and the HTML-only index pages are legal toctree entries, but
+    # this builder emits no such pages, and VitePress cannot catch a dead
+    # link that lives in the generated config.
+    links = {item.get("link") for item in sidebar}
+    assert "/self" not in links and "/genindex" not in links
+
 
 def test_captioned_groups_become_nav_dropdowns(tmp_path: Path) -> None:
     _, nav = build(tmp_path)

@@ -10,14 +10,20 @@ site root, exactly where intersphinx looks (``<site>/objects.inv``).
 
 from __future__ import annotations
 
+from contextlib import contextmanager
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, cast
 
 from sphinx.util import logging
 from sphinx.util.inventory import InventoryFile
 
+from sphinx_vitepress.translator import VIRTUAL_PAGES
+
 if TYPE_CHECKING:
+    from collections.abc import Iterator
+
     from sphinx.builders import Builder
+    from sphinx.environment import BuildEnvironment
 
     from sphinx_vitepress.builder import VitepressBuilder
 
@@ -47,5 +53,29 @@ def write_inventory(builder: VitepressBuilder) -> None:
     public = Path(builder.outdir) / "public"
     public.mkdir(parents=True, exist_ok=True)
     target = public / "objects.inv"
-    InventoryFile.dump(str(target), builder.env, cast("Builder", _HtmlUriBuilder(builder)))
+    with _without_virtual_pages(builder.env):
+        InventoryFile.dump(str(target), builder.env, cast("Builder", _HtmlUriBuilder(builder)))
     logger.info("sphinx-vitepress: wrote %s", target)
+
+
+@contextmanager
+def _without_virtual_pages(env: BuildEnvironment) -> Iterator[None]:
+    """Hide the HTML-only index pages while the inventory is written.
+
+    The std domain advertises ``genindex``/``modindex``/``py-modindex``/
+    ``search`` as labels. This builder never emits those pages, so leaving
+    them in the inventory hands other projects cross-references that 404.
+    """
+    # Go through the domain object: that is what InventoryFile.dump reads.
+    # Both mappings matter, since get_objects falls back to anonlabels for
+    # any name missing from labels.
+    domain = env.domains.standard_domain
+    labels = {name: domain.labels.pop(name) for name in VIRTUAL_PAGES if name in domain.labels}
+    anon = {
+        name: domain.anonlabels.pop(name) for name in VIRTUAL_PAGES if name in domain.anonlabels
+    }
+    try:
+        yield
+    finally:
+        domain.labels.update(labels)
+        domain.anonlabels.update(anon)

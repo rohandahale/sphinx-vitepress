@@ -19,6 +19,18 @@ from __future__ import annotations
 from pathlib import Path
 
 
+def _check_segment(name: str, setting: str) -> str:
+    """Reject anything that is not a single, ordinary path segment.
+
+    Deploy folder names are joined onto the deploy directory and then
+    removed, so an absolute or traversing value would delete a directory
+    outside the tree.
+    """
+    if not name or name in (".", "..") or "/" in name or "\\" in name or Path(name).is_absolute():
+        raise ValueError(f"{setting} must be a single folder name, not {name!r}")
+    return name
+
+
 def determine_bases(
     version: str | None, *, keep: str = "breaking", devurl: str = "dev"
 ) -> list[str]:
@@ -33,7 +45,7 @@ def determine_bases(
     - ``"patch"``: ``["v1.2.3", "v1.2", "v1", "stable"]``
     """
     if version is None:
-        return [devurl]
+        return [_check_segment(devurl, "devurl")]
     parts = version.removeprefix("v").split(".")
     try:
         numbers = [int(part) for part in parts]

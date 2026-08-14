@@ -51,6 +51,12 @@ def test_inventory_is_written_with_html_uris(
     assert "guide std:doc -1 guide.html Guide" in text
     assert ".md#" not in text, "inventory URIs must target served .html routes"
 
+    # The std domain advertises HTML-builder-only index pages as labels.
+    # This builder never emits them, so shipping them would hand other
+    # projects cross-references that 404.
+    advertised = {line.split()[0] for line in text.splitlines() if line.strip()}
+    assert advertised.isdisjoint({"genindex", "modindex", "py-modindex", "search"})
+
 
 def test_second_project_resolves_into_our_site(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch

@@ -466,7 +466,10 @@ class VitepressTranslator(MarkdownTranslator):
 
     def visit_literal_block(self, node: nodes.Element) -> None:
         self._push_status(escape_text=False)
-        language = node["classes"][1] if "code" in node["classes"] else ""
+        classes = node["classes"]
+        # `.. code-block:: :class: code` yields exactly ["code"], so the
+        # second entry cannot be assumed to exist.
+        language = classes[1] if "code" in classes and len(classes) > 1 else ""
         if "language" in node:
             language = node["language"]
         language = FENCE_LANGUAGE_REMAP.get(language, language)

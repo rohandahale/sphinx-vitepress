@@ -18,3 +18,5 @@ Nav Root
    :hidden:
 
    loose
+   self
+   genindex

@@ -15,6 +15,8 @@ from typing import TYPE_CHECKING, Any
 
 from sphinx import addnodes
 
+from sphinx_vitepress.translator import VIRTUAL_PAGES
+
 if TYPE_CHECKING:
     from sphinx.environment import BuildEnvironment
 
@@ -29,6 +31,17 @@ def _title_of(env: BuildEnvironment, docname: str) -> str:
 
 def _is_external(target: str) -> bool:
     return "://" in target or target.startswith("mailto:")
+
+
+def _is_linkable(target: str) -> bool:
+    """Whether a toctree entry names a page this builder actually writes.
+
+    ``self`` is Sphinx's marker for the containing document, and the
+    virtual index pages are HTML-builder-only, so linking to either
+    produces a 404 that VitePress cannot catch (it does not scan the
+    generated config).
+    """
+    return target != "self" and target not in VIRTUAL_PAGES
 
 
 def _toctrees(env: BuildEnvironment, docname: str) -> list[addnodes.toctree]:
@@ -51,7 +64,7 @@ def _items_for(
             if _is_external(target):
                 items.append({"text": title or target, "link": target})
                 continue
-            if target in seen:
+            if target in seen or not _is_linkable(target):
                 continue
             seen.add(target)
             item: dict[str, Any] = {
@@ -79,7 +92,7 @@ def build_sidebar(env: BuildEnvironment) -> list[dict[str, Any]]:
             if _is_external(target):
                 entries.append({"text": title or target, "link": target})
                 continue
-            if target in seen:
+            if target in seen or not _is_linkable(target):
                 continue
             seen.add(target)
             item: dict[str, Any] = {

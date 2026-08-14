@@ -24,6 +24,25 @@ from sphinx_vitepress.versions import (
 )
 
 
+def _release_key(name: str) -> tuple[int, ...] | None:
+    try:
+        return tuple(int(part) for part in name.removeprefix("v").split("."))
+    except ValueError:
+        return None
+
+
+def _newer_release_deployed(deploy_dir: Path, version: str, *, devurl: str) -> str | None:
+    """An already-deployed release folder newer than ``version``, if any."""
+    this = _release_key(version)
+    if this is None:
+        return None
+    for name in collect_versions(deploy_dir, devurl=devurl):
+        other = _release_key(name)
+        if other is not None and other > this[: len(other)]:
+            return name
+    return None
+
+
 def run_deploy(
     source: str,
     deploy_dir: Path,
@@ -43,7 +62,18 @@ def run_deploy(
         return 2
 
     deploy_dir.mkdir(parents=True, exist_ok=True)
-    bases = determine_bases(version, keep=keep, devurl=devurl)
+    try:
+        bases = determine_bases(version, keep=keep, devurl=devurl)
+    except ValueError as err:
+        print(err)
+        return 2
+
+    # Releasing an older line must not point `stable` back at it.
+    if version is not None and "stable" in bases:
+        newer = _newer_release_deployed(deploy_dir, version, devurl=devurl)
+        if newer is not None:
+            bases = [base for base in bases if base != "stable"]
+            print(f"keeping stable at {newer} (newer than {version})")
     workdir = Path(tempfile.mkdtemp(prefix="sphinx-vitepress-deploy-"))
     markdown_dir = workdir / "markdown"
 
@@ -66,15 +96,17 @@ def run_deploy(
             if rc != 0:
                 return rc
 
+            # Build beside the live folder and swap only on success, so a
+            # failed build never leaves a published version deleted.
             destination = deploy_dir / base
-            if destination.exists():
-                shutil.rmtree(destination)
-            code = run_vitepress(
-                markdown_dir, "build", extra=["--outDir", str(destination.resolve())]
-            )
+            staging = workdir / f"staged-{base}"
+            code = run_vitepress(markdown_dir, "build", extra=["--outDir", str(staging.resolve())])
             if code != 0:
                 return code
-            write_siteinfo(destination, base)
+            write_siteinfo(staging, base)
+            if destination.exists():
+                shutil.rmtree(destination)
+            shutil.move(str(staging), str(destination))
             print(f"deployed base {base}/")
     finally:
         shutil.rmtree(workdir, ignore_errors=True)

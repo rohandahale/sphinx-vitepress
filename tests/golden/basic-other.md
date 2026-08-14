@@ -14,3 +14,9 @@ Deprecated since version 0.2: Use the new thing instead.
 
 An inline mention of the Index inside a sentence must keep the
 sentence intact, so only its link is dropped.
+
+## Bad Fence {#bad-fence}
+
+```python
+x = 1
+```

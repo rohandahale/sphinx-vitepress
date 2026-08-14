@@ -22,3 +22,11 @@ Surviving Section
 
 An inline mention of the :ref:`genindex` inside a sentence must keep the
 sentence intact, so only its link is dropped.
+
+Bad Fence
+---------
+
+.. code-block::
+   :class: code
+
+   x = 1
