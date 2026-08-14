@@ -1,5 +1,5 @@
-Python API
-==========
+API
+===
 
 Most users only need ``conf.py`` settings and the command line. These modules
 are the public surface for extending or embedding the builder. This page is

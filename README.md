@@ -34,7 +34,7 @@ sphinx-vitepress build docs _site  # production build
 Existing projects need no changes: autodoc, napoleon, intersphinx and MyST keep
 working, and `sphinx-build -b vitepress <src> <out>` works too.
 
-Configuration, versioned deploys and the Python API are covered in the
+Configuration, versioned deploys and the API are covered in the
 [documentation](https://www.rohandahale.com/sphinx-vitepress/), which is itself
 built with this package.
 
