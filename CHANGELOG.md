@@ -6,6 +6,52 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.1.3] - 2026-08-14
+
+A review of the whole repository turned up several ways the package could
+lose content or break a user's site. Everything below is fixed and covered
+by tests.
+
+### Fixed
+
+- Pruning Sphinx's stock "Indices and tables" links no longer takes real
+  content with it. A page whose only content was that block was written as
+  an empty file, its title gone while the sidebar still linked to it, and
+  unrelated headings with no body yet were deleted from other pages.
+- `sphinx-vitepress init` followed by a build now works on a clean
+  install. The scaffolded project loads MyST, which was only a development
+  dependency, so the documented quickstart failed with an extension error.
+- `sphinx-vitepress init` no longer overwrites an existing `index.md`. It
+  refuses when either `conf.py` or `index.md` is already present.
+- Copying the bundled theme into `<sourcedir>/.vitepress/theme/`, the
+  documented way to customize it, produced a site that would not build:
+  the generated `accent.css` was written only for the bundled theme while
+  the copied entry point still imported it.
+- `sphinx-vitepress deploy` can no longer damage a published tree. Version
+  folders are built to a staging directory and swapped in only on success,
+  so a failed build cannot delete a live version; `--devurl` must be a
+  single path segment, since it was joined onto the deploy directory and
+  then removed; and releasing an older line no longer moves `stable` back
+  onto it.
+- Toctree entries `self`, `genindex`, `modindex` and `search` no longer
+  become sidebar links to pages that are never generated. VitePress does
+  not check links inside the generated config, so these shipped silently.
+- The published `objects.inv` no longer advertises those same pages, which
+  handed other projects cross-references that 404.
+- A `code-block` whose classes are exactly `code` no longer crashes the
+  build with `IndexError`.
+- A failed `npm install` reports what went wrong instead of a traceback,
+  and dependencies are reinstalled when `package.json` changes, so
+  upgrading no longer keeps building against the previous VitePress pin.
+
+### Changed
+
+- `docutils` and `myst-parser` are declared as runtime dependencies rather
+  than relied on transitively.
+- Python 3.14 is tested and declared as supported.
+- The navbar shows at most six top-level entries; this is now documented
+  rather than silently dropping the rest. The sidebar is unaffected.
+
 ## [0.1.2] - 2026-08-14
 
 ### Changed
@@ -81,7 +127,8 @@ First release. A Sphinx builder that renders documentation with VitePress.
   with any section they empty, so VitePress's dead-link check stays enabled.
 - Targets VitePress 1.6.x.
 
-[Unreleased]: https://github.com/rohandahale/sphinx-vitepress/compare/v0.1.2...HEAD
+[Unreleased]: https://github.com/rohandahale/sphinx-vitepress/compare/v0.1.3...HEAD
+[0.1.3]: https://github.com/rohandahale/sphinx-vitepress/releases/tag/v0.1.3
 [0.1.2]: https://github.com/rohandahale/sphinx-vitepress/releases/tag/v0.1.2
 [0.1.1]: https://github.com/rohandahale/sphinx-vitepress/releases/tag/v0.1.1
 [0.1.0]: https://github.com/rohandahale/sphinx-vitepress/releases/tag/v0.1.0
