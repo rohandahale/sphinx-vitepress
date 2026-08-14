@@ -49,25 +49,50 @@ def _sole_content_container(ref: nodes.Element) -> nodes.Element | None:
     return container
 
 
+def _collapse_upward(node: nodes.Element | None) -> None:
+    """Remove ``node`` and its ancestors for as long as they are now empty.
+
+    Only containers on the path of an actual removal are considered, so an
+    empty section elsewhere in the document (a heading an author has not
+    filled in yet) is left alone. The page's own top-level section is never
+    removed either, since that would take the title with it and leave a
+    blank, linked page behind.
+    """
+    while node is not None:
+        parent = node.parent
+        if parent is None:
+            return
+        if isinstance(node, (nodes.bullet_list, nodes.enumerated_list)):
+            if node.children:
+                return
+        elif isinstance(node, nodes.section):
+            if isinstance(parent, nodes.document):
+                return
+            if any(not isinstance(child, nodes.title) for child in node.children):
+                return
+        else:
+            return
+        # Several removed links can share a container, so the same node may
+        # be reached twice; the second visit must not re-remove it.
+        if node not in parent.children:
+            return
+        parent.remove(node)
+        node = parent
+
+
 def prune_virtual_page_links(doctree: nodes.document, suffix: str) -> None:
+    emptied: list[nodes.Element] = []
     for ref in list(doctree.findall(nodes.reference)):
         if not _is_virtual(ref, suffix):
             continue
         container = _sole_content_container(ref)
         if container is not None and container.parent is not None:
-            container.parent.remove(container)
+            parent = container.parent
+            parent.remove(container)
+            emptied.append(parent)
 
-    # Collapse whatever the removals emptied out, innermost first.
-    for _ in range(3):
-        changed = False
-        for empty_list in list(doctree.findall(nodes.bullet_list)):
-            if not empty_list.children and empty_list.parent is not None:
-                empty_list.parent.remove(empty_list)
-                changed = True
-        for section in list(doctree.findall(nodes.section)):
-            body = [child for child in section.children if not isinstance(child, nodes.title)]
-            if not body and section.parent is not None:
-                section.parent.remove(section)
-                changed = True
-        if not changed:
-            break
+    seen: set[int] = set()
+    for parent in emptied:
+        if id(parent) not in seen:
+            seen.add(id(parent))
+            _collapse_upward(parent)
