@@ -1,0 +1,1 @@
+var DOCS_CURRENT_VERSION = "v0.1";

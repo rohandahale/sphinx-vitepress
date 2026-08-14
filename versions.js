@@ -1,1 +1,1 @@
-var DOC_VERSIONS = ["dev"];
+var DOC_VERSIONS = ["stable", "dev", "v0.1"];
