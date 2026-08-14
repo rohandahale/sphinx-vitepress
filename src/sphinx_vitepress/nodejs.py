@@ -34,9 +34,10 @@ def ensure_node_modules(site: Path) -> None:
     subprocess.run([npm, "install", "--no-audit", "--no-fund"], cwd=site, check=True)
 
 
-def run_vitepress(site: Path, command: str) -> int:
+def run_vitepress(site: Path, command: str, extra: list[str] | None = None) -> int:
     """Run ``vitepress <command>`` (build/dev) in ``site``; returns the exit code."""
     ensure_node_modules(site)
     npx = _require("npx")
-    proc = subprocess.run([npx, "--no-install", "vitepress", command, "."], cwd=site, check=False)
+    argv = [npx, "--no-install", "vitepress", command, ".", *(extra or [])]
+    proc = subprocess.run(argv, cwd=site, check=False)
     return proc.returncode

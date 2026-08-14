@@ -17,10 +17,12 @@ in the same commit as any port.
   `docstrings.css` derive from its `template/src/.vitepress/theme/` files),
   theme `index.ts` structure, the placeholder-substitution config.mts pattern,
   and the `<details>` docstring block markup emitted by our translator.
-  *(pending)* the versioned-deploy design (`bases.txt`/`siteinfo.js`/
-  `versions.js`) and `VersionPicker.vue`.
-- **Makie.jl** — MIT (<https://github.com/MakieOrg/Makie.jl>). *(pending)*
-  `VersionPicker.vue`, via DocumenterVitepress.jl.
+  Also ported: the versioned-deploy design (per-base builds + `siteinfo.js`/
+  `versions.js`/root redirect, in `src/sphinx_vitepress/versions.py` and
+  `deploy.py`) and `VersionPicker.vue`.
+- **Makie.jl** — MIT (<https://github.com/MakieOrg/Makie.jl>). **Ported**:
+  `template/theme/VersionPicker.vue` derives from Makie's component, via
+  DocumenterVitepress.jl's adaptation.
 - **VitePress** — MIT, Copyright (c) 2019–present Evan You and VitePress contributors
   (<https://github.com/vuejs/vitepress>). Runtime dependency installed via npm,
   not vendored.

@@ -5,9 +5,17 @@
 // To customize, place your own theme directory under
 // <sourcedir>/.vitepress/theme/ — it replaces this one entirely.
 import DefaultTheme from 'vitepress/theme'
+import type { Theme } from 'vitepress'
+import VersionPicker from './VersionPicker.vue'
 
 import './style.css'
 import './docstrings.css'
 import './overrides.css'
 
-export default DefaultTheme
+export default {
+  extends: DefaultTheme,
+  enhanceApp({ app }) {
+    // Referenced from nav as { component: 'VersionPicker' } on versioned builds.
+    app.component('VersionPicker', VersionPicker)
+  },
+} satisfies Theme

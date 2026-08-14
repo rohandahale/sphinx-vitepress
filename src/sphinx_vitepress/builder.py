@@ -13,6 +13,7 @@ from sphinx.locale import __
 from sphinx_markdown_builder.builder import MarkdownBuilder
 
 from sphinx_vitepress.config_writer import write_project_files
+from sphinx_vitepress.inventory import write_inventory
 from sphinx_vitepress.translator import VitepressTranslator
 
 
@@ -25,3 +26,5 @@ class VitepressBuilder(MarkdownBuilder):
     def finish(self) -> None:
         super().finish()
         write_project_files(self)
+        if self.config.vitepress_write_inventory:
+            write_inventory(self)

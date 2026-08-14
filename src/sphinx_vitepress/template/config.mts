@@ -9,7 +9,15 @@ export default defineConfig({
   description: __SVP_DESCRIPTION__,
   base: __SVP_BASE__,
   cleanUrls: true,
+  head: __SVP_HEAD__,
   markdown: { math: true },
+  vite: {
+    define: {
+      // Vite define values are raw replacement source text, hence the
+      // double encoding via JSON.stringify.
+      __DOCS_DEPLOY_ROOT__: JSON.stringify(__SVP_DEPLOY_ROOT_VALUE__),
+    },
+  },
   themeConfig: {
     nav: __SVP_NAV__,
     sidebar: __SVP_SIDEBAR__,

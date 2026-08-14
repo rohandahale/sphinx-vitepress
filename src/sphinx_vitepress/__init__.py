@@ -30,6 +30,14 @@ def setup(app: Sphinx) -> dict[str, Any]:
     # "details": DocumenterVitepress-style <details> docstring blocks with
     # badges (default). "headings": plain ###-level signature headings.
     app.add_config_value("vitepress_docstring_style", "details", "html", str)
+    # Write .vitepress/public/objects.inv so other Sphinx projects can
+    # intersphinx-link INTO this site.
+    app.add_config_value("vitepress_write_inventory", True, "html", bool)
+    # Versioned deploys: the site root ABOVE the version folders (e.g.
+    # "/my-repo/" while base is "/my-repo/v1/"). Set by `sphinx-vitepress
+    # deploy`; when non-empty, the generated config injects versions.js /
+    # siteinfo.js and a VersionPicker nav entry.
+    app.add_config_value("vitepress_deploy_root", "", "html", str)
 
     return {
         "version": __version__,

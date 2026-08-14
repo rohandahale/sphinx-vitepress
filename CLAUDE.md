@@ -45,8 +45,18 @@ autodoc objects now render as `<details class="docstring custom-block">` with
 anchored summary bindings + `<Badge>` type labels + fenced signatures
 (`vitepress_docstring_style = "headings"` restores plain headings); fixed the
 napoleon `literal_emphasis` adjacent-italics bug that rendered `*[*` asterisk
-soup in Parameters lists. Next: **M4** — objects.inv emission + versioned
-deploy (+ source-link badges via viewcode/linkcode). See DESIGN.md §F.
+soup in Parameters lists.
+**M4 done** (2026-08-14): `objects.inv` emitted to `public/` (site root) with
+`.html` URIs — round-trip proven by a test where a second Sphinx project
+resolves `:py:func:` refs INTO the built demo site; versioned deploys ported
+from DV (`versions.py`: determine_bases/siteinfo.js/versions.js/root redirect;
+`deploy.py`: one full VitePress build per base, npm install shared);
+`sphinx-vitepress deploy <src> --deploy-dir <dir> --release vX.Y.Z|--dev
+--repo-base /name/` is real; VersionPicker.vue ported (nav component +
+head-injected scripts, Vite define needs the JSON.stringify double-encoding);
+`.github/workflows/docs.yml` is the reference gh-pages workflow (deploys the
+demo site). Next: **M5** — dogfooded docs, source-link badges
+(viewcode/linkcode), compat matrix, 0.1.0 release. See DESIGN.md §F.
 
 ## Architecture in one paragraph
 

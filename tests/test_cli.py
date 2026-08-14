@@ -50,6 +50,14 @@ def test_init_result_builds(tmp_path: Path) -> None:
     assert (out / ".vitepress" / "config.mts").exists()
 
 
-def test_deploy_is_honest_stub(capsys: pytest.CaptureFixture[str]) -> None:
-    assert main(["deploy"]) == 2
-    assert "not implemented" in capsys.readouterr().out
+def test_deploy_requires_arguments() -> None:
+    with pytest.raises(SystemExit):
+        main(["deploy"])  # source, --deploy-dir, and --release/--dev are required
+
+
+def test_deploy_validates_repo_base(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    rc = main(
+        ["deploy", "unused-src", "--deploy-dir", str(tmp_path), "--dev", "--repo-base", "repo"]
+    )
+    assert rc == 2
+    assert "start and end with '/'" in capsys.readouterr().out

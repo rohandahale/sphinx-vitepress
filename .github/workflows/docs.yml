@@ -1,0 +1,55 @@
+# Demo site, versioned deploy to gh-pages.
+# This doubles as the reference workflow for sphinx-vitepress users:
+# swap `demo/docs` for your own docs source.
+name: Docs
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: docs-deploy
+  cancel-in-progress: false
+
+jobs:
+  demo-site:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.13"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: uv sync
+
+      - name: Load existing gh-pages tree
+        run: |
+          mkdir -p _site
+          if git ls-remote --exit-code --heads origin gh-pages >/dev/null 2>&1; then
+            git fetch origin gh-pages --depth=1
+            git archive origin/gh-pages | tar -x -C _site
+          fi
+
+      - name: Build versioned deploy tree
+        env:
+          REPO_NAME: ${{ github.event.repository.name }}
+        run: |
+          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+            uv run sphinx-vitepress deploy demo/docs --deploy-dir _site \
+              --release "${GITHUB_REF_NAME}" --repo-base "/${REPO_NAME}/"
+          else
+            uv run sphinx-vitepress deploy demo/docs --deploy-dir _site \
+              --dev --repo-base "/${REPO_NAME}/"
+          fi
+
+      - uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: _site

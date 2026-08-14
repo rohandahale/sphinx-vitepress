@@ -92,9 +92,23 @@ def cmd_init(args: argparse.Namespace) -> int:
     return 0
 
 
-def cmd_deploy(_args: argparse.Namespace) -> int:
-    print("sphinx-vitepress deploy: not implemented yet — versioned deploys land in M4.")
-    return 2
+def cmd_deploy(args: argparse.Namespace) -> int:
+    from sphinx_vitepress.deploy import run_deploy
+    from sphinx_vitepress.nodejs import NodeToolchainError
+
+    version = None if args.dev else args.release
+    try:
+        return run_deploy(
+            args.source,
+            Path(args.deploy_dir),
+            version=version,
+            repo_base=args.repo_base,
+            keep=args.keep,
+            devurl=args.devurl,
+        )
+    except NodeToolchainError as err:
+        print(err)
+        return 1
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -124,7 +138,31 @@ def main(argv: list[str] | None = None) -> int:
     p_init.add_argument("directory", nargs="?", default="docs", help="target directory")
     p_init.set_defaults(func=cmd_init)
 
-    p_deploy = subparsers.add_parser("deploy", help="versioned gh-pages deploy (lands in M4)")
+    p_deploy = subparsers.add_parser(
+        "deploy",
+        help="build a versioned deploy tree (one folder per version, versions.js, root redirect)",
+    )
+    p_deploy.add_argument("source", help="Sphinx source directory (contains conf.py)")
+    p_deploy.add_argument(
+        "--deploy-dir",
+        required=True,
+        help="target tree (e.g. a checkout of the gh-pages branch)",
+    )
+    which = p_deploy.add_mutually_exclusive_group(required=True)
+    which.add_argument("--release", metavar="vX.Y.Z", help="deploy a release version")
+    which.add_argument("--dev", action="store_true", help="deploy the dev version")
+    p_deploy.add_argument(
+        "--repo-base",
+        default="/",
+        help="site root above the version folders, e.g. /my-repo/ for GitHub project pages",
+    )
+    p_deploy.add_argument(
+        "--keep",
+        choices=["breaking", "minor", "patch"],
+        default="breaking",
+        help="which alias folders a release updates (default: breaking -> vX + stable)",
+    )
+    p_deploy.add_argument("--devurl", default="dev", help="folder name for dev builds")
     p_deploy.set_defaults(func=cmd_deploy)
 
     args = parser.parse_args(argv)
