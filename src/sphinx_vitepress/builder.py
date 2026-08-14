@@ -12,6 +12,7 @@ from __future__ import annotations
 from sphinx.locale import __
 from sphinx_markdown_builder.builder import MarkdownBuilder
 
+from sphinx_vitepress.config_writer import write_project_files
 from sphinx_vitepress.translator import VitepressTranslator
 
 
@@ -20,3 +21,7 @@ class VitepressBuilder(MarkdownBuilder):
     epilog = __("The VitePress markdown files are in %(outdir)s.")
 
     default_translator_class = VitepressTranslator
+
+    def finish(self) -> None:
+        super().finish()
+        write_project_files(self)

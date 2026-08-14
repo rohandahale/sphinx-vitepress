@@ -49,6 +49,14 @@ def test_basic_rst(tmp_path: Path) -> None:
     check_golden("basic-index.md", index)
     check_golden("basic-other.md", (tmp_path / "other.md").read_text(encoding="utf-8"))
 
+    # The builder must leave a complete VitePress project behind.
+    config = (tmp_path / ".vitepress" / "config.mts").read_text(encoding="utf-8")
+    assert 'title: "basic"' in config
+    assert '"text": "Other Page"' in config
+    assert '"link": "/other"' in config
+    assert "__SVP_" not in config, "all placeholders must be substituted"
+    assert (tmp_path / "package.json").exists()
+
 
 def test_myst(tmp_path: Path) -> None:
     build("test-myst", tmp_path)

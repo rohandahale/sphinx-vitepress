@@ -30,11 +30,18 @@ with that site is an explicit goal (milestone M3).
 
 ## Status
 
-**M0 + M1 done** (2026-08-14): the builder works end to end — Sphinx (autodoc +
-napoleon + MyST) → `sphinx-build -b vitepress` → VitePress markdown →
-`npx vitepress build` green with strict dead links (proven by the opt-in smoke
-test). Next milestone: **M2** — sidebar/nav + config.mts generation, frontmatter,
-and the real `init|dev|build` CLI. See DESIGN.md §F.
+**M0 + M1 + M2 done** (2026-08-14): one command works end to end —
+`sphinx-vitepress build <src>` runs Sphinx (autodoc + napoleon + MyST), emits
+VitePress markdown **plus a generated `.vitepress/config.mts`** (sidebar/nav
+derived from the toctree) **and `package.json`**, then npm-installs and runs
+the real `vitepress build`, green with strict dead links (opt-in smoke test).
+`sphinx-vitepress init|dev|build` are real; `deploy` is an honest stub.
+A user `.vitepress/` dir in the source overrides the bundled template
+(placeholders still substituted). Frontmatter was deferred from M2 to M3
+(VitePress derives titles from the h1, so nothing needed it yet).
+Next milestone: **M3** — theme parity with DocumenterVitepress (port
+style.css/docstrings.css/theme index.ts, docstring `<details>` blocks).
+See DESIGN.md §F.
 
 ## Architecture in one paragraph
 
@@ -71,7 +78,9 @@ Target VitePress 1.6.x; CI tracks 2.0-alpha.
   build the demo's markdown (offline mode skips the intersphinx fetch)
 - `VITEPRESS_SMOKE=1 uv run pytest tests/test_vitepress_smoke.py` — full proof:
   npm install + `vitepress build` over the demo, strict dead links (needs node ≥ 20)
-- CLI (`uv run sphinx-vitepress …`) is still a stub until M2
+- `uv run sphinx-vitepress dev demo/docs` — live preview of the demo site
+- `uv run sphinx-vitepress build <src> [out] [--no-build]` — full build
+  (`--no-build` stops after markdown + config; no Node needed)
 
 ## Hard-won facts (do not re-litigate)
 

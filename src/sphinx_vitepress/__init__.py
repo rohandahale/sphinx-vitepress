@@ -22,6 +22,11 @@ def setup(app: Sphinx) -> dict[str, Any]:
     # compile their contents (safe default), "passthrough" emits them verbatim
     # (for trusted HTML that needs Vue), "drop" removes them.
     app.add_config_value("vitepress_raw_html", "v-pre", "html", str)
+    # Site metadata for the generated .vitepress/config.mts; empty values
+    # fall back to the Sphinx `project` name.
+    app.add_config_value("vitepress_title", "", "html", str)
+    app.add_config_value("vitepress_description", "", "html", str)
+    app.add_config_value("vitepress_base", "/", "html", str)
 
     return {
         "version": __version__,
