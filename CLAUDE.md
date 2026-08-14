@@ -30,8 +30,11 @@ with that site is an explicit goal (milestone M3).
 
 ## Status
 
-Pre-code: scaffold only (2026-08-14). Next milestone: **M0** — pyproject, src layout,
-demo package, CI. See DESIGN.md §F.
+**M0 + M1 done** (2026-08-14): the builder works end to end — Sphinx (autodoc +
+napoleon + MyST) → `sphinx-build -b vitepress` → VitePress markdown →
+`npx vitepress build` green with strict dead links (proven by the opt-in smoke
+test). Next milestone: **M2** — sidebar/nav + config.mts generation, frontmatter,
+and the real `init|dev|build` CLI. See DESIGN.md §F.
 
 ## Architecture in one paragraph
 
@@ -61,11 +64,14 @@ Target VitePress 1.6.x; CI tracks 2.0-alpha.
 
 ## Commands
 
-Current (scaffold stage): none — no package yet. After M0, keep this section updated:
-
-- `uv sync` · `uv run pytest` · `uv run ruff check . && uv run ruff format .`
-- `uv run sphinx-build -b vitepress demo/docs build/markdown`
-- `uv run sphinx-vitepress dev demo/docs`
+- `uv sync` · `uv run pytest` · `uv run ruff check . && uv run ruff format .` · `uv run mypy`
+- `UPDATE_GOLDEN=1 uv run pytest tests/test_build.py` — regenerate goldens after an
+  intentional output change (then eyeball the diff before committing)
+- `VPDEMO_OFFLINE=1 uv run sphinx-build -b vitepress demo/docs demo/build/markdown` —
+  build the demo's markdown (offline mode skips the intersphinx fetch)
+- `VITEPRESS_SMOKE=1 uv run pytest tests/test_vitepress_smoke.py` — full proof:
+  npm install + `vitepress build` over the demo, strict dead links (needs node ≥ 20)
+- CLI (`uv run sphinx-vitepress …`) is still a stub until M2
 
 ## Hard-won facts (do not re-litigate)
 
