@@ -1,5 +1,12 @@
 # sphinx-vitepress
 
+[![docs stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://www.rohandahale.com/sphinx-vitepress/stable/)
+[![docs dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://www.rohandahale.com/sphinx-vitepress/dev/)
+[![CI](https://github.com/rohandahale/sphinx-vitepress/actions/workflows/ci.yml/badge.svg)](https://github.com/rohandahale/sphinx-vitepress/actions/workflows/ci.yml)
+[![PyPI](https://img.shields.io/pypi/v/sphinx-vitepress.svg)](https://pypi.org/project/sphinx-vitepress/)
+[![Python](https://img.shields.io/pypi/pyversions/sphinx-vitepress.svg)](https://pypi.org/project/sphinx-vitepress/)
+[![License](https://img.shields.io/pypi/l/sphinx-vitepress.svg)](LICENSE)
+
 A Sphinx builder that renders your documentation with [VitePress](https://vitepress.dev).
 It is the Python counterpart of
 [DocumenterVitepress.jl](https://github.com/LuxDL/DocumenterVitepress.jl).
