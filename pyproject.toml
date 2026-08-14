@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "sphinx-vitepress"
-version = "0.1.4"
+version = "0.1.5"
 description = "A Sphinx builder that renders your documentation with VitePress."
 readme = "README.md"
 license = "MIT"

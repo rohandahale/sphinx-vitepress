@@ -6,6 +6,16 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.1.5] - 2026-08-14
+
+### Fixed
+
+- Clicking a *source* badge collapsed the docstring card instead of
+  opening the code. The badge sits inside `<summary>`, where the theme
+  disables anchors so that clicking the binding name only toggles the
+  block, and the source link inherited that. It is now excluded, so the
+  link opens GitHub in a new tab and the card stays as it was.
+
 ## [0.1.4] - 2026-08-14
 
 ### Added
@@ -156,7 +166,8 @@ First release. A Sphinx builder that renders documentation with VitePress.
   with any section they empty, so VitePress's dead-link check stays enabled.
 - Targets VitePress 1.6.x.
 
-[Unreleased]: https://github.com/rohandahale/sphinx-vitepress/compare/v0.1.4...HEAD
+[Unreleased]: https://github.com/rohandahale/sphinx-vitepress/compare/v0.1.5...HEAD
+[0.1.5]: https://github.com/rohandahale/sphinx-vitepress/releases/tag/v0.1.5
 [0.1.4]: https://github.com/rohandahale/sphinx-vitepress/releases/tag/v0.1.4
 [0.1.3]: https://github.com/rohandahale/sphinx-vitepress/releases/tag/v0.1.3
 [0.1.2]: https://github.com/rohandahale/sphinx-vitepress/releases/tag/v0.1.2

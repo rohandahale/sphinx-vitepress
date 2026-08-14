@@ -9,7 +9,7 @@ from sphinx_vitepress import accents, linkcode
 if TYPE_CHECKING:
     from sphinx.application import Sphinx
 
-__version__ = "0.1.4"
+__version__ = "0.1.5"
 
 
 def setup(app: Sphinx) -> dict[str, Any]:

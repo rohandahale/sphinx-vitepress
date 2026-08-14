@@ -71,3 +71,20 @@ def test_setting_produces_source_badges(tmp_path: Path, monkeypatch) -> None:
     api = (tmp_path / "api.md").read_text(encoding="utf-8")
     assert '<Badge class="source-link"' in api
     assert re.search(rf"{re.escape(BASE)}/tests/demo/vpdemo/core\.py#L\d+-L\d+", api)
+
+
+def test_source_badges_stay_clickable_in_the_theme(tmp_path: Path, monkeypatch) -> None:
+    """The badge sits inside <summary>, which disables anchors by default.
+
+    Without an explicit override the click falls through to the summary and
+    collapses the card instead of opening the source.
+    """
+    monkeypatch.setenv("VPDEMO_OFFLINE", "1")
+    rc = build_main(["-b", "vitepress", "-q", str(DEMO_DOCS), str(tmp_path)])
+    assert rc == 0
+
+    css = (tmp_path / ".vitepress" / "theme" / "docstrings.css").read_text(encoding="utf-8")
+    override = css.index(".docstring.custom-block summary .source-link a")
+    blanket = css.index(".docstring.custom-block summary a")
+    assert blanket < override, "the override has to come after the rule it undoes"
+    assert "pointer-events: auto" in css[override:]

@@ -15,10 +15,17 @@
 }
 
 .docstring.custom-block summary a {
-  /* The summary anchor exists for deep links INTO the page; clicking the
-     summary should only toggle the block. */
+  /* The binding name is an anchor so other pages can deep-link to it;
+     clicking it should just toggle the block, not navigate. */
   pointer-events: none;
   text-decoration: none;
+}
+
+/* The source link is a real destination, so it has to stay clickable.
+   Without this it inherits pointer-events: none from the rule above and
+   the click falls through to the summary, collapsing the card instead. */
+.docstring.custom-block summary .source-link a {
+  pointer-events: auto;
 }
 
 .docstring-binding {
