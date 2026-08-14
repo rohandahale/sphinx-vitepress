@@ -42,6 +42,17 @@ def test_init_scaffolds_and_refuses_overwrite(tmp_path: Path) -> None:
     assert main(["init", str(docs)]) == 1  # refuses to clobber
 
 
+def test_init_never_destroys_an_existing_index(tmp_path: Path) -> None:
+    """An index.md with no conf.py beside it was silently overwritten."""
+    docs = tmp_path / "docs"
+    docs.mkdir()
+    (docs / "index.md").write_text("# Mine\n", encoding="utf-8")
+
+    assert main(["init", str(docs)]) == 1
+    assert (docs / "index.md").read_text(encoding="utf-8") == "# Mine\n"
+    assert not (docs / "conf.py").exists(), "and nothing else is written either"
+
+
 def test_init_result_builds(tmp_path: Path) -> None:
     docs = tmp_path / "docs"
     assert main(["init", str(docs)]) == 0

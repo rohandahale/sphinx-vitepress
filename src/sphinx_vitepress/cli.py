@@ -82,12 +82,15 @@ def cmd_dev(args: argparse.Namespace) -> int:
 def cmd_init(args: argparse.Namespace) -> int:
     target = Path(args.directory)
     conf = target / "conf.py"
-    if conf.exists():
-        print(f"{conf} already exists; refusing to overwrite.")
+    index = target / "index.md"
+    existing = [path for path in (conf, index) if path.exists()]
+    if existing:
+        for path in existing:
+            print(f"{path} already exists; refusing to overwrite.")
         return 1
     target.mkdir(parents=True, exist_ok=True)
     conf.write_text(_CONF_TEMPLATE, encoding="utf-8")
-    (target / "index.md").write_text(_INDEX_TEMPLATE, encoding="utf-8")
+    index.write_text(_INDEX_TEMPLATE, encoding="utf-8")
     print(f"initialized {target}/. Next: sphinx-vitepress dev {target}")
     return 0
 

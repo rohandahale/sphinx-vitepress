@@ -852,6 +852,8 @@ name = "sphinx-vitepress"
 version = "0.1.2"
 source = { editable = "." }
 dependencies = [
+    { name = "docutils" },
+    { name = "myst-parser" },
     { name = "sphinx", version = "9.0.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
     { name = "sphinx", version = "9.1.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
     { name = "sphinx-markdown-builder" },
@@ -867,6 +869,8 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "docutils", specifier = ">=0.20" },
+    { name = "myst-parser", specifier = ">=2.0" },
     { name = "sphinx", specifier = ">=7.0" },
     { name = "sphinx-markdown-builder", specifier = ">=0.6.10,<0.7" },
 ]

@@ -1,5 +1,5 @@
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling>=1.27"]  # PEP 639 license expression
 build-backend = "hatchling.build"
 
 [project]
@@ -32,6 +32,11 @@ classifiers = [
 dependencies = [
   "sphinx>=7.0",
   "sphinx-markdown-builder>=0.6.10,<0.7",
+  # Imported directly by the translator; not relied on transitively.
+  "docutils>=0.20",
+  # `sphinx-vitepress init` scaffolds a markdown project, so this is
+  # required for the documented quickstart to work.
+  "myst-parser>=2.0",
 ]
 
 [project.urls]
