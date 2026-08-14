@@ -1,0 +1,4 @@
+Inner Page
+==========
+
+Body.

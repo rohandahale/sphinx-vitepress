@@ -174,6 +174,17 @@ class VitepressTranslator(MarkdownTranslator):
             target = target[: -len(suffix)]
         return target in VIRTUAL_PAGES
 
+    def visit_compound(self, node: nodes.Element) -> None:
+        # Sphinx renders a toctree inline as a nested link list. VitePress
+        # already shows exactly those links in its sidebar, so repeating
+        # them in the body is duplication — and on a `layout: home` page it
+        # buries the hero under a wall of links. Opt back in with
+        # vitepress_inline_toctree = True.
+        if self.config.vitepress_inline_toctree:
+            return
+        if "toctree-wrapper" in node.get("classes", []):
+            raise nodes.SkipNode
+
     @pushing_context
     def visit_field_name(self, _node: nodes.Element) -> None:
         self._push_context(WrappedContext("**", ":** "))

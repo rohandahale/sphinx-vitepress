@@ -13,9 +13,12 @@ Content linking back to :doc:`index`.
 Indices
 -------
 
-The stock Sphinx boilerplate below points at HTML-builder-only pages;
-VitePress has no such routes, so these must not become links.
-
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+
+Surviving Section
+-----------------
+
+An inline mention of the :ref:`genindex` inside a sentence must keep the
+sentence intact, so only its link is dropped.

@@ -49,11 +49,14 @@ def test_basic_rst(tmp_path: Path) -> None:
     check_golden("basic-index.md", index)
 
     other = (tmp_path / "other.md").read_text(encoding="utf-8")
-    # Sphinx's stock "Indices and tables" boilerplate points at pages only
-    # the HTML builders synthesize; as links they'd fail VitePress's
-    # dead-link check, so they must degrade to plain text.
+    # Sphinx's stock "Indices and tables" block links to pages only the HTML
+    # builders synthesize. Bullets that are nothing but such a link go, and
+    # the section they emptied goes with them...
     assert "](genindex" not in other and "](search" not in other
-    assert "* Index\n" in other and "* Search Page\n" in other
+    assert "## Indices" not in other
+    # ...but the same link inside a sentence only loses its link.
+    assert "## Surviving Section" in other
+    assert "An inline mention of the Index inside a sentence" in other
     check_golden("basic-other.md", other)
 
     # The builder must leave a complete VitePress project behind.

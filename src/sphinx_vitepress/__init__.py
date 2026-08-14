@@ -59,6 +59,9 @@ def setup(app: Sphinx) -> dict[str, Any]:
     # hex color, four hex stops (deep, mid, bright, glow), or a mapping
     # with separate "light"/"dark" entries. See sphinx_vitepress.accents.
     app.add_config_value("vitepress_accent", accents.DEFAULT, "html", (str, list, dict))
+    # Sphinx renders toctrees inline as link lists; VitePress shows the same
+    # links in its sidebar. Set True to keep the inline copy as well.
+    app.add_config_value("vitepress_inline_toctree", False, "html", bool)
 
     return {
         "version": __version__,

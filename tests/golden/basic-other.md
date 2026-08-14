@@ -10,11 +10,7 @@ Tips render as tips.
 Deprecated since version 0.2: Use the new thing instead.
 :::
 
-## Indices {#indices}
+## Surviving Section {#surviving-section}
 
-The stock Sphinx boilerplate below points at HTML-builder-only pages;
-VitePress has no such routes, so these must not become links.
-
-* Index
-* Module Index
-* Search Page
+An inline mention of the Index inside a sentence must keep the
+sentence intact, so only its link is dropped.
