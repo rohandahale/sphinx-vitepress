@@ -78,9 +78,12 @@ def write_project_files(builder: VitepressBuilder) -> None:
     (out_vp / "config.mts").write_text(content, encoding="utf-8")
 
     # Theme: the user's own .vitepress/theme (already copied above) wins;
-    # otherwise ship the bundled DocumenterVitepress-derived theme.
+    # otherwise ship the bundled theme, REFRESHING it every build so theme
+    # updates in sphinx-vitepress releases actually reach existing outdirs.
     theme_dst = out_vp / "theme"
-    if not theme_dst.exists():
+    if not (user_vp / "theme").is_dir():
+        if theme_dst.exists():
+            shutil.rmtree(theme_dst)
         shutil.copytree(TEMPLATE_DIR / "theme", theme_dst)
 
     user_package = srcdir / "package.json"

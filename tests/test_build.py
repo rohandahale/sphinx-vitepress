@@ -60,6 +60,22 @@ def test_basic_rst(tmp_path: Path) -> None:
     assert (tmp_path / ".vitepress" / "theme" / "docstrings.css").exists()
 
 
+def test_stale_outputs_refresh_when_version_changes(tmp_path: Path) -> None:
+    """Upgrading sphinx-vitepress must rewrite outputs even when the doc
+    sources themselves are unchanged (the output FORMAT changed)."""
+    build("test-basic", tmp_path)
+
+    (tmp_path / "index.md").write_text("stale junk from an older release\n", encoding="utf-8")
+    style = tmp_path / ".vitepress" / "theme" / "style.css"
+    style.write_text("/* stale theme */\n", encoding="utf-8")
+    (tmp_path / ".sphinx-vitepress-version").write_text("0.0.0\n", encoding="utf-8")
+
+    build("test-basic", tmp_path)  # incremental build, sources untouched
+
+    assert "stale junk" not in (tmp_path / "index.md").read_text(encoding="utf-8")
+    assert "svp-hot" in style.read_text(encoding="utf-8"), "bundled theme must refresh"
+
+
 def test_myst(tmp_path: Path) -> None:
     build("test-myst", tmp_path)
     index = (tmp_path / "index.md").read_text(encoding="utf-8")

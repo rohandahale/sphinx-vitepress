@@ -66,3 +66,8 @@ def test_second_project_resolves_into_our_site(
     index = (consumer_out / "index.md").read_text(encoding="utf-8")
     assert "https://demo.example/site/api.html#vpdemo.core.blackbody_flux" in index
     assert "https://demo.example/site/api.html#vpdemo.core.Simulation" in index
+
+    # Intersphinx-linked type annotations must stay plain inside the
+    # signature code fence (no [name](url) leaking into the fence).
+    # Sphinx renders the return annotation with a Unicode arrow.
+    assert "```python\nload(entry: vpdemo.core.CatalogEntry) → None\n```" in index

@@ -20,6 +20,7 @@ from sphinx_markdown_builder.contexts import (
     SubContextParams,
     TableContext,
     TitleContext,
+    WrappedContext,
 )
 from sphinx_markdown_builder.escape import escape_html_quote, escape_markdown_chars
 from sphinx_markdown_builder.translator import (
@@ -118,6 +119,7 @@ class VitepressTranslator(MarkdownTranslator):
         self._desc_first_sig: list[bool] = []
         self._sig_ids: list[str] = []
         self._sig_name: str | None = None
+        self._in_signature = False
 
     # -- Vue-safe text ---------------------------------------------------------
 
@@ -141,6 +143,23 @@ class VitepressTranslator(MarkdownTranslator):
         self.add("`</span>" if self._vpre_literal else "`")
         self._vpre_literal = False
         self._pop_status()
+
+    @pushing_context
+    def visit_reference(self, node: nodes.Element) -> None:
+        if self._in_signature:
+            # Signatures land inside a code fence: a markdown link would show
+            # as literal [name](url) noise, so render just the text.
+            # (Intersphinx-linked type annotations trigger this.)
+            self._push_context(SubContext())
+            return
+        super().visit_reference(node)
+
+    @pushing_context
+    def visit_field_name(self, _node: nodes.Element) -> None:
+        # Trailing space after the bold marker: "**Parameters:** value" —
+        # without it, the soft line break between field name and body can
+        # render with no visual gap.
+        self._push_context(WrappedContext("**", ":** "))
 
     @pushing_context
     def visit_literal_emphasis(self, _node: nodes.Element) -> None:
@@ -286,6 +305,7 @@ class VitepressTranslator(MarkdownTranslator):
         self._sig_ids = list(node.get("ids", []))
         self._sig_name = str(node.get("fullname", "")) or None
         # Capture the signature text raw (it lands inside a code fence).
+        self._in_signature = True
         self._push_status(escape_text=False)
         self._push_context(SubContext())
 
@@ -296,6 +316,7 @@ class VitepressTranslator(MarkdownTranslator):
         signature_ctx = self._ctx_queue.pop()
         signature = signature_ctx.make().strip()
         self._pop_status()
+        self._in_signature = False
         self._emit_signature(signature)
 
     def _emit_signature(self, signature: str) -> None:
