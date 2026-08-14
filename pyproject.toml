@@ -36,7 +36,7 @@ dependencies = [
 
 [project.urls]
 Homepage = "https://github.com/rohandahale/sphinx-vitepress"
-Documentation = "https://rohandahale.github.io/sphinx-vitepress/"
+Documentation = "https://www.rohandahale.com/sphinx-vitepress/"
 Repository = "https://github.com/rohandahale/sphinx-vitepress"
 Changelog = "https://github.com/rohandahale/sphinx-vitepress/blob/main/CHANGELOG.md"
 Issues = "https://github.com/rohandahale/sphinx-vitepress/issues"

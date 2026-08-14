@@ -4,6 +4,8 @@ A Sphinx builder that renders your documentation with [VitePress](https://vitepr
 It is the Python counterpart of
 [DocumenterVitepress.jl](https://github.com/LuxDL/DocumenterVitepress.jl).
 
+**Documentation:** <https://www.rohandahale.com/sphinx-vitepress/> (built with this package).
+
 Keep your `conf.py`, autodoc, NumPy-style docstrings, and intersphinx cross-references;
 swap classic Sphinx HTML for a modern VitePress site.
 
