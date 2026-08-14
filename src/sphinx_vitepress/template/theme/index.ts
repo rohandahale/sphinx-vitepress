@@ -9,6 +9,7 @@ import type { Theme } from 'vitepress'
 import VersionPicker from './VersionPicker.vue'
 
 import './style.css'
+import './accent.css' // generated from the `vitepress_accent` setting
 import './docstrings.css'
 import './overrides.css'
 

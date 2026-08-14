@@ -12,10 +12,12 @@ from __future__ import annotations
 from collections.abc import Iterator
 from pathlib import Path
 
+from docutils import nodes
 from sphinx.locale import __
 from sphinx_markdown_builder.builder import MarkdownBuilder
 
 import sphinx_vitepress
+from sphinx_vitepress import frontmatter
 from sphinx_vitepress.config_writer import write_project_files
 from sphinx_vitepress.inventory import write_inventory
 from sphinx_vitepress.translator import VitepressTranslator
@@ -48,6 +50,13 @@ class VitepressBuilder(MarkdownBuilder):
             yield from self.env.found_docs
         else:
             yield from super().get_outdated_docs()
+
+    def write_doc(self, docname: str, doctree: nodes.document) -> None:
+        super().write_doc(docname, doctree)
+        block = frontmatter.render(self.config.vitepress_frontmatter.get(docname, {}))
+        if block:
+            path = Path(self.outdir) / f"{docname}{self.out_suffix}"
+            path.write_text(block + path.read_text(encoding="utf-8"), encoding="utf-8")
 
     def finish(self) -> None:
         super().finish()

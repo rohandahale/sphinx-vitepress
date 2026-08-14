@@ -20,24 +20,20 @@
 
 /* Colors */
 :root {
-  --svp-blue: #4063d8;
-  --svp-purple: #9558b2;
-  --svp-red: #cb3c33;
-
-  --vp-c-brand: #0087d7;
-  --vp-c-brand-1: #0890df;
-  --vp-c-brand-2: #0599ef;
-  --vp-c-brand-3: #0c9ff4;
-  --vp-c-brand-light: #0087d7;
-  --vp-c-brand-dark: #5fd7ff;
+  --vp-c-brand: var(--svp-accent-deep);
+  --vp-c-brand-1: var(--svp-accent-deep);
+  --vp-c-brand-2: var(--svp-accent-mid);
+  --vp-c-brand-3: var(--svp-accent-mid);
+  --vp-c-brand-light: var(--svp-accent-mid);
+  --vp-c-brand-dark: var(--svp-accent-deep);
   --vp-c-brand-dimm: #212425;
 
-  /* afmhot accents (matplotlib's 'afmhot' colormap: black -> red -> orange
-     -> yellow), replacing DocumenterVitepress's greens */
-  --svp-hot-deep: #a93000; /* afmhot ~t=0.33 */
-  --svp-hot: #e66600; /* afmhot ~t=0.45 */
-  --svp-hot-bright: #ff8000; /* afmhot  t=0.50 */
-  --svp-hot-glow: #ffb333; /* afmhot ~t=0.60 */
+  /* Accent stops, dark -> light. accent.css (generated from the
+     `vitepress_accent` setting) overrides these defaults. */
+  --svp-accent-deep: #0060a8;
+  --svp-accent-mid: #0087d7;
+  --svp-accent-bright: #0c9ff4;
+  --svp-accent-glow: #5fd7ff;
 
   /* Complementary colors */
   --vp-dark-gray: #1e1e1e;
@@ -71,21 +67,25 @@
 
 /* Component: Button */
 :root {
-  --vp-button-brand-border: var(--vp-light-gray);
-  --vp-button-brand-bg: var(--vp-c-brand-light);
+  --vp-button-brand-border: var(--svp-accent-deep);
+  --vp-button-brand-bg: var(--svp-accent-mid);
   --vp-button-brand-hover-border: var(--vp-c-bg-alt);
-  --vp-button-brand-hover-bg: var(--svp-blue);
+  --vp-button-brand-hover-bg: var(--svp-accent-deep);
 }
 
 /* Component: Home hero */
 :root {
   --vp-home-hero-name-color: transparent;
-  --vp-home-hero-name-background: -webkit-linear-gradient(120deg, #9558b2 30%, #cb3c33);
+  --vp-home-hero-name-background: -webkit-linear-gradient(
+    120deg,
+    var(--svp-accent-deep) 30%,
+    var(--svp-accent-mid)
+  );
   --vp-home-hero-image-background-image: linear-gradient(
     -145deg,
-    #9558b282 30%,
-    #ff80009a 30%,
-    #cb3d33e3
+    var(--svp-accent-glow) 30%,
+    var(--svp-accent-bright) 30%,
+    var(--svp-accent-deep)
   );
   --vp-home-hero-image-filter: blur(40px);
 }
@@ -94,33 +94,33 @@
   --vp-home-hero-name-color: transparent;
   --vp-home-hero-name-background: -webkit-linear-gradient(
     120deg,
-    var(--svp-purple) 15%,
-    var(--svp-hot-glow),
-    var(--svp-hot-deep)
+    var(--svp-accent-glow) 15%,
+    var(--svp-accent-bright),
+    var(--svp-accent-deep)
   );
   --vp-home-hero-image-background-image: linear-gradient(
     -45deg,
-    var(--svp-hot-deep) 30%,
-    var(--svp-hot-bright),
+    var(--svp-accent-deep) 30%,
+    var(--svp-accent-bright),
     var(--vp-dark-gray) 30%
   );
   --vp-home-hero-image-filter: blur(56px);
 }
 
 :root.dark {
-  --vp-custom-block-tip-border: var(--svp-hot);
+  --vp-custom-block-tip-border: var(--svp-accent-mid);
   --vp-custom-block-tip-text: var(--vp-dark-subtext);
   --vp-custom-block-tip-bg: var(--vp-dark-gray-mute);
 }
 
 /* Link colors (dark mode) */
 .dark {
-  --vp-c-brand: var(--svp-hot-bright);
-  --vp-button-brand-border: var(--svp-hot-glow);
-  --vp-button-brand-bg: var(--svp-hot-deep);
-  --vp-c-brand-1: var(--svp-hot-bright);
-  --vp-c-brand-2: var(--svp-hot-glow);
-  --vp-c-brand-3: var(--svp-hot);
+  --vp-c-brand: var(--svp-accent-bright);
+  --vp-button-brand-border: var(--svp-accent-glow);
+  --vp-button-brand-bg: var(--svp-accent-deep);
+  --vp-c-brand-1: var(--svp-accent-bright);
+  --vp-c-brand-2: var(--svp-accent-glow);
+  --vp-c-brand-3: var(--svp-accent-mid);
 }
 
 @media (min-width: 640px) {

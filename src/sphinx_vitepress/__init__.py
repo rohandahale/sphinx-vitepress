@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
+from sphinx_vitepress import accents
+
 if TYPE_CHECKING:
     from sphinx.application import Sphinx
 
@@ -50,6 +52,13 @@ def setup(app: Sphinx) -> dict[str, Any]:
     # Logo and favicon default to Sphinx's own html_logo / html_favicon.
     app.add_config_value("vitepress_logo", "", "html", str)
     app.add_config_value("vitepress_favicon", "", "html", str)
+    # Per-page VitePress frontmatter: {docname: {...}}. The main use is a
+    # hero landing page ({"index": {"layout": "home", "hero": {...}}}).
+    app.add_config_value("vitepress_frontmatter", {}, "html", dict)
+    # Accent palette: a preset name ("afmhot", "viridis", "plasma", …), a
+    # hex color, four hex stops (deep, mid, bright, glow), or a mapping
+    # with separate "light"/"dark" entries. See sphinx_vitepress.accents.
+    app.add_config_value("vitepress_accent", accents.DEFAULT, "html", (str, list, dict))
 
     return {
         "version": __version__,

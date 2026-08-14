@@ -17,6 +17,7 @@ from typing import TYPE_CHECKING, Any
 
 from sphinx.util import logging
 
+from sphinx_vitepress import accents
 from sphinx_vitepress.sidebar import build_nav, build_sidebar
 
 if TYPE_CHECKING:
@@ -155,6 +156,9 @@ def write_project_files(builder: VitepressBuilder) -> None:
         if theme_dst.exists():
             shutil.rmtree(theme_dst)
         shutil.copytree(TEMPLATE_DIR / "theme", theme_dst)
+        (theme_dst / "accent.css").write_text(
+            accents.render_css(builder.config.vitepress_accent), encoding="utf-8"
+        )
 
     user_package = srcdir / "package.json"
     package_source = user_package if user_package.is_file() else TEMPLATE_DIR / "package.json"

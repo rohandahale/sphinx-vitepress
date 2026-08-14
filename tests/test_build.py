@@ -119,7 +119,7 @@ def test_stale_outputs_refresh_when_version_changes(tmp_path: Path) -> None:
     build("test-basic", tmp_path)  # incremental build, sources untouched
 
     assert "stale junk" not in (tmp_path / "index.md").read_text(encoding="utf-8")
-    assert "svp-hot" in style.read_text(encoding="utf-8"), "bundled theme must refresh"
+    assert "svp-accent" in style.read_text(encoding="utf-8"), "bundled theme must refresh"
 
 
 def test_myst(tmp_path: Path) -> None:
