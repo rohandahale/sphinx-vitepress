@@ -156,6 +156,12 @@ def write_project_files(builder: VitepressBuilder) -> None:
         if theme_dst.exists():
             shutil.rmtree(theme_dst)
         shutil.copytree(TEMPLATE_DIR / "theme", theme_dst)
+
+    # accent.css is generated, and the theme entry point imports it. A user
+    # theme is usually a copy of the bundled one and imports it too, so it
+    # is written for any theme directory: leaving it out of a copied theme
+    # fails the VitePress build with an unresolved import.
+    if theme_dst.is_dir():
         (theme_dst / "accent.css").write_text(
             accents.render_css(builder.config.vitepress_accent), encoding="utf-8"
         )
