@@ -19,10 +19,13 @@ from sphinx_vitepress.cli import main as cli_main
 
 DEMO_DOCS = Path(__file__).parent / "demo" / "docs"
 
-pytestmark = pytest.mark.skipif(
-    not os.environ.get("VITEPRESS_SMOKE"),
-    reason="set VITEPRESS_SMOKE=1 to run the real VitePress build (needs node, npm, network)",
-)
+pytestmark = [
+    pytest.mark.smoke,
+    pytest.mark.skipif(
+        not os.environ.get("VITEPRESS_SMOKE"),
+        reason="set VITEPRESS_SMOKE=1 to run the real VitePress build (needs node, npm, network)",
+    ),
+]
 
 
 def test_cli_build_produces_site(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:

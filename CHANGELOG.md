@@ -79,7 +79,7 @@ First release. A Sphinx builder that renders documentation with VitePress.
 - Sphinx's stock *Indices and tables* block links to `genindex`/`modindex`/
   `search`, which only the HTML builders create. Those links are removed, along
   with any section they empty, so VitePress's dead-link check stays enabled.
-- Targets VitePress 1.6.x; CI also builds against the 2.0 alpha.
+- Targets VitePress 1.6.x.
 
 [Unreleased]: https://github.com/rohandahale/sphinx-vitepress/compare/v0.1.2...HEAD
 [0.1.2]: https://github.com/rohandahale/sphinx-vitepress/releases/tag/v0.1.2

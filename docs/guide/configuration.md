@@ -53,6 +53,15 @@ Stops are used by role, not position: light mode draws link text from the
 darkest stop so it stays readable on white, while dark mode uses the brighter
 end. The result is written to `.vitepress/theme/accent.css`.
 
+## Navigation
+
+The sidebar mirrors your toctrees in full. A `:caption:` becomes a
+collapsible sidebar group and a navbar dropdown.
+
+The navbar shows at most the first six top-level entries, since a wider bar
+wraps badly on smaller screens; the sidebar is unaffected and still lists
+everything.
+
 ## Landing pages
 
 `vitepress_frontmatter` maps a document name to VitePress frontmatter. The main

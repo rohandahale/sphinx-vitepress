@@ -5,7 +5,7 @@
 [![CI](https://github.com/rohandahale/sphinx-vitepress/actions/workflows/ci.yml/badge.svg)](https://github.com/rohandahale/sphinx-vitepress/actions/workflows/ci.yml)
 [![PyPI](https://img.shields.io/pypi/v/sphinx-vitepress.svg)](https://pypi.org/project/sphinx-vitepress/)
 [![Python](https://img.shields.io/pypi/pyversions/sphinx-vitepress.svg)](https://pypi.org/project/sphinx-vitepress/)
-[![License](https://img.shields.io/pypi/l/sphinx-vitepress.svg)](LICENSE)
+[![License](https://img.shields.io/pypi/l/sphinx-vitepress.svg)](https://github.com/rohandahale/sphinx-vitepress/blob/main/LICENSE)
 
 A Sphinx builder that renders your documentation with [VitePress](https://vitepress.dev).
 It is the Python counterpart of
@@ -40,5 +40,5 @@ built with this package.
 
 ## License
 
-MIT. See [LICENSE](LICENSE), which also carries the notices for the
+MIT. See [LICENSE](https://github.com/rohandahale/sphinx-vitepress/blob/main/LICENSE), which also carries the notices for the
 MIT-licensed projects this one adapts code from.

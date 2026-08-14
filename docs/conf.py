@@ -2,13 +2,15 @@
 
 import os
 import sys
+from importlib.metadata import version as _package_version
 
 sys.path.insert(0, os.path.abspath("../src"))
 
 project = "sphinx-vitepress"
 author = "Rohan Dahale"
 copyright = "2026, Rohan Dahale"
-release = "0.1.0"
+# Underscore-prefixed so Sphinx does not treat the import as a config value.
+release = _package_version("sphinx-vitepress")
 
 extensions = [
     "sphinx.ext.autodoc",
