@@ -35,7 +35,7 @@ _site/
 ```
 
 `versions.js` and the root redirect are regenerated from whatever version
-folders exist, so **older versions keep working without being rebuilt** — copy
+folders exist, so **older versions keep working without being rebuilt**. Copy
 the previous tree into `--deploy-dir` before running, as the workflow below
 does.
 
@@ -113,8 +113,8 @@ jobs:
 Enable Pages for the repository with `gh-pages` as the source branch.
 
 :::warning
-Do not leave symlinks in the `gh-pages` branch. Delete them before deploying —
-they confuse the static-file server and the version picker.
+Do not leave symlinks in the `gh-pages` branch. Delete them before deploying,
+since they confuse the static-file server and the version picker.
 :::
 
 ## Read the Docs

@@ -3,8 +3,8 @@
 Follows DocumenterVitepress.jl's proven pattern: a template ``config.mts``
 containing placeholders, filled by string substitution. A user-supplied
 ``<sourcedir>/.vitepress/`` directory overrides the bundled template (its
-files are copied through, and placeholders in its ``config.mts`` — if any —
-are still substituted), so full customization never requires forking us.
+files are copied through, and any placeholders in its ``config.mts`` are
+still substituted), so full customization never requires forking us.
 """
 
 from __future__ import annotations
@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 
 
 def _json(value: Any, indent: int | None = None) -> str:
-    """JSON for embedding in config.mts — real UTF-8, not \\uXXXX escapes."""
+    """JSON for embedding in config.mts: real UTF-8, not \\uXXXX escapes."""
     return json.dumps(value, indent=indent, ensure_ascii=False)
 
 

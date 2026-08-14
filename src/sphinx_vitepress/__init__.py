@@ -1,4 +1,4 @@
-"""sphinx-vitepress — a Sphinx builder that renders documentation with VitePress."""
+"""sphinx-vitepress: a Sphinx builder that renders documentation with VitePress."""
 
 from __future__ import annotations
 
@@ -40,7 +40,7 @@ def setup(app: Sphinx) -> dict[str, Any]:
     # deploy`; when non-empty, the generated config injects versions.js /
     # siteinfo.js and a VersionPicker nav entry.
     app.add_config_value("vitepress_deploy_root", "", "html", str)
-    # Repository URL — drives the navbar GitHub icon and, unless
+    # Repository URL. Drives the navbar GitHub icon and, unless
     # vitepress_edit_link_pattern overrides it, the per-page "Edit this
     # page" link (whose path is derived by locating the source directory
     # inside the git working tree).

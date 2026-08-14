@@ -3,9 +3,9 @@
 VitePress compiles every markdown page as a Vue template, so three things in
 plain prose are hazards that classic markdown escaping does not cover:
 
-- ``<`` / ``>`` — start HTML/component tags; ``dict[str, int]`` is safe but
+- ``<`` / ``>`` start HTML/component tags. ``dict[str, int]`` is safe but
   ``Callable<T>``-style text or a stray ``<Response>`` is a build error.
-- ``{{`` — starts a Vue interpolation; ``{{ placeholder }}`` text either
+- ``{{`` starts a Vue interpolation, so ``{{ placeholder }}`` text either
   errors or silently evaluates.
 - Fenced code blocks are auto-``v-pre`` by VitePress and need no treatment;
   inline code is handled separately by the translator (wrapped in

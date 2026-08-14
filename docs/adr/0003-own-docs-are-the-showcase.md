@@ -13,7 +13,7 @@ fixture.
 Both roles were originally filled by `demo/`, which made the repository read as
 if the example were the product. Now:
 
-- `docs/` proves the builder on real content — hero landing page, nav
+- `docs/` proves the builder on real content: hero landing page, nav
   dropdowns, admonitions, math, and an API reference generated from this
   package's own docstrings with source badges. If the builder breaks, the
   project's own site breaks.

@@ -3,7 +3,7 @@
 ## Requirements
 
 - Python ≥ 3.11
-- Node.js ≥ 20 — only to run VitePress itself. Markdown generation never
+- Node.js 20 or newer, only to run VitePress itself. Markdown generation never
   needs Node, so documentation can be generated on machines without it and
   built elsewhere.
 
@@ -84,8 +84,8 @@ equivalent, so full customization never requires forking this package.
 ## Dead links
 
 VitePress fails a production build on dead links, and that check is left on
-deliberately — it catches broken cross-references that Sphinx's HTML builders
-would have rendered as silently dangling anchors.
+deliberately, because it catches broken cross-references that Sphinx's HTML
+builders would have rendered as silently dangling anchors.
 
 The one exception is handled for you: Sphinx's stock *Indices and tables* block
 points at `genindex`, `modindex` and `search`, pages only the HTML builders

@@ -65,7 +65,7 @@ FENCE_LANGUAGE_REMAP: dict[str, str] = {
 #: equivalent (its built-in local search replaces them). Nearly every
 #: Sphinx project's index page links to these, and VitePress fails builds
 #: on dead links, so the links are emitted as plain text instead.
-#: Genuinely broken links are left alone — VitePress *should* catch those.
+#: Genuinely broken links are left alone, since VitePress *should* catch those.
 VIRTUAL_PAGES = frozenset({"genindex", "modindex", "py-modindex", "search"})
 
 
@@ -86,7 +86,7 @@ def _find_source_url(signature: nodes.Element) -> str | None:
 
     ``linkcode`` emits an absolute repository URL; ``viewcode`` emits a
     relative link into its generated ``_modules`` pages, which this builder
-    does not produce — so only absolute links are used.
+    does not produce, so only absolute links are used.
     """
     for reference in signature.findall(nodes.reference):
         if not _is_source_link(reference):
@@ -221,7 +221,7 @@ class VitepressTranslator(MarkdownTranslator):
     def visit_compound(self, node: nodes.Element) -> None:
         # Sphinx renders a toctree inline as a nested link list. VitePress
         # already shows exactly those links in its sidebar, so repeating
-        # them in the body is duplication — and on a `layout: home` page it
+        # them in the body is duplication, and on a `layout: home` page it
         # buries the hero under a wall of links. Opt back in with
         # vitepress_inline_toctree = True.
         if self.config.vitepress_inline_toctree:
@@ -369,7 +369,7 @@ class VitepressTranslator(MarkdownTranslator):
     # vitepress_docstring_style = "details" (default) wraps every autodoc
     # object in `<details class="docstring custom-block" open>` with a
     # <summary> holding the anchored binding name plus a <Badge> for the
-    # object type, followed by the full signature in a python fence — the
+    # object type, followed by the full signature in a python fence: the
     # DocumenterVitepress.jl look. "headings" keeps plain ###-level headings.
 
     def visit_desc(self, node: nodes.Element) -> None:

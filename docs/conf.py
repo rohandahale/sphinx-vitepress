@@ -1,4 +1,4 @@
-"""Documentation for sphinx-vitepress — built with sphinx-vitepress."""
+"""Documentation for sphinx-vitepress, built with sphinx-vitepress."""
 
 import os
 import sys
@@ -63,8 +63,8 @@ vitepress_frontmatter = {
             "name": "sphinx-vitepress",
             "text": "Sphinx power, VitePress polish",
             "tagline": (
-                "A Sphinx builder that renders your documentation with VitePress — "
-                "keep autodoc, docstrings and intersphinx, lose the dated theme."
+                "A Sphinx builder that renders your documentation with VitePress. "
+                "Keep autodoc, docstrings and intersphinx, lose the dated theme."
             ),
             "actions": [
                 {"theme": "brand", "text": "Get started", "link": "/guide/getting-started"},

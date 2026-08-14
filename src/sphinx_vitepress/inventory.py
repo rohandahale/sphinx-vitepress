@@ -5,7 +5,7 @@ ourselves: every documented object (``py:*`` roles, ``std:doc`` pages,
 ``std:label`` targets) becomes resolvable FROM other Sphinx projects via
 ordinary intersphinx. The file goes to ``public/`` under the source root
 (VitePress's static-assets directory), which is copied verbatim to the
-site root — exactly where intersphinx looks (``<site>/objects.inv``).
+site root, exactly where intersphinx looks (``<site>/objects.inv``).
 """
 
 from __future__ import annotations

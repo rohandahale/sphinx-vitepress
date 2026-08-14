@@ -2,8 +2,8 @@ Python API
 ==========
 
 Most users only need ``conf.py`` settings and the command line. These modules
-are the public surface for extending or embedding the builder — and this page
-is itself produced by the builder it documents.
+are the public surface for extending or embedding the builder. This page is
+itself produced by the builder it documents.
 
 The builder
 -----------

@@ -1,6 +1,6 @@
 """Locate and drive the Node toolchain.
 
-Only the CLI touches Node — the Sphinx builder itself always finishes with
+Only the CLI touches Node. The Sphinx builder itself always finishes with
 markdown + config on disk, so docs can be generated on machines without Node
 and built elsewhere.
 """

@@ -1,5 +1,5 @@
 /* sphinx-vitepress default theme styling.
-   Adapted from DocumenterVitepress.jl's style.css (MIT, LuxDL) — the same
+   Adapted from DocumenterVitepress.jl's style.css (MIT, LuxDL): the same
    brand palette and component treatment, minus Julia-specific pieces.
    Override CSS variables here or in overrides.css:
    https://github.com/vuejs/vitepress/blob/main/src/client/theme-default/styles/vars.css */

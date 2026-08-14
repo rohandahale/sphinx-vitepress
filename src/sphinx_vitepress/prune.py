@@ -7,7 +7,7 @@ a heading over two or three inert bullets.
 
 Whole list items (or paragraphs) that consist of nothing but such a link
 are removed, along with any list or section left empty as a result. A link
-used *inside* a sentence is left in place — the translator renders it as
+used *inside* a sentence is left in place. The translator renders it as
 plain text, so the sentence still reads correctly.
 """
 

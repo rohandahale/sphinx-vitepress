@@ -2,7 +2,7 @@
 
 The bundled theme paints links, buttons, active nav items and hero
 gradients from four accent stops, supplied as CSS variables. Projects pick
-a palette with ``vitepress_accent`` — either a preset name (sampled from
+a palette with ``vitepress_accent``: either a preset name (sampled from
 the matplotlib colormap of the same name, so the site can match the
 figures in it) or explicit colors.
 

@@ -88,7 +88,7 @@ def cmd_init(args: argparse.Namespace) -> int:
     target.mkdir(parents=True, exist_ok=True)
     conf.write_text(_CONF_TEMPLATE, encoding="utf-8")
     (target / "index.md").write_text(_INDEX_TEMPLATE, encoding="utf-8")
-    print(f"initialized {target}/ — next: sphinx-vitepress dev {target}")
+    print(f"initialized {target}/. Next: sphinx-vitepress dev {target}")
     return 0
 
 

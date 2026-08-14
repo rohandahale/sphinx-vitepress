@@ -1,7 +1,7 @@
 # Configuration
 
-Every setting is optional. Where Sphinx already has an equivalent — `copyright`,
-`html_logo`, `html_favicon` — that value is used, so most projects need only
+Every setting is optional. Where Sphinx already has an equivalent (`copyright`,
+`html_logo`, `html_favicon`) that value is used, so most projects need only
 `vitepress_repo`.
 
 ## Site identity
@@ -107,6 +107,6 @@ def linkcode_resolve(domain, info):
 :::warning Vue safety
 VitePress compiles every page as a Vue template, so `{{ … }}` and stray angle
 brackets in prose are build errors. All generated text is escaped for this
-automatically — including mustaches inside inline code, which are wrapped in
+automatically, including mustaches inside inline code, which are wrapped in
 `<span v-pre>`. Fenced code blocks are already safe.
 :::

@@ -12,7 +12,7 @@ VitePress markdown diverges from GitHub markdown.
 
 - Its translator already covers the docutils/autodoc node long tail (tables,
   field lists, `desc*` signatures, footnotes) with a graceful warn-once
-  fallback — hundreds of hours we don't need to re-spend.
+  fallback. That is a large amount of work we do not need to repeat.
 - Its internals are NOT a declared stable API, hence the tight `<0.7` pin.
 
 ## Fallback

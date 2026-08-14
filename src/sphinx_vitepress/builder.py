@@ -38,7 +38,7 @@ class VitepressBuilder(MarkdownBuilder):
     def init(self) -> None:
         super().init()
         # The base class treats a doc as up to date when the target .md is
-        # newer than its source — but our OUTPUT FORMAT changes across
+        # newer than its source, but our OUTPUT FORMAT changes across
         # sphinx-vitepress releases. Stamp the outdir with the version that
         # produced it and force a full rewrite on mismatch.
         self._version_stamp = Path(self.outdir) / ".sphinx-vitepress-version"

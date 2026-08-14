@@ -32,7 +32,7 @@ VITEPRESS_SMOKE=1 uv run pytest tests/test_vitepress_smoke.py
 - Translator and renderer changes **require** golden-file coverage: a Sphinx
   source under `tests/roots/` in, an expected `.md` out. Regenerate with
   `UPDATE_GOLDEN=1 uv run pytest tests/test_build.py`, then read the diff
-  before committing it — a golden update is a claim that the new output is
+  before committing it. A golden update is a claim that the new output is
   correct.
 - `tests/demo/` is a small package whose docstrings are deliberately hostile
   to VitePress (Vue mustaches, angle brackets, math, doctests). Add to it when
@@ -48,7 +48,7 @@ VITEPRESS_SMOKE=1 uv run pytest tests/test_vitepress_smoke.py
 - **Windows is supported.** Use `posixpath` for URIs and pass list arguments to
   `subprocess` (no shell); CI runs the suite on Windows.
 - Ports from other projects (sphinx-markdown-builder, DocumenterVitepress.jl,
-  Makie.jl) must keep their notices — record every one in `NOTICE.md` in the
+  Makie.jl) must keep their notices. Record every one in `NOTICE.md` in the
   same commit.
 
 ## Releasing
