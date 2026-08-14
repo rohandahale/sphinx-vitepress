@@ -6,6 +6,22 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.1.2] - 2026-08-14
+
+### Changed
+
+- Third-party notices moved from `NOTICE.md` into `LICENSE`, so a single
+  file carries the licence and the attributions it requires.
+- The README covers installation and basic use; configuration, deployment
+  and the API reference live in the documentation rather than being
+  duplicated.
+- The reference page is called "API" instead of "Python API".
+
+### Fixed
+
+- The project description shown on PyPI no longer claims the package is
+  unpublished.
+
 ## [0.1.1] - 2026-08-14
 
 ### Changed
@@ -65,6 +81,7 @@ First release. A Sphinx builder that renders documentation with VitePress.
   with any section they empty, so VitePress's dead-link check stays enabled.
 - Targets VitePress 1.6.x; CI also builds against the 2.0 alpha.
 
-[Unreleased]: https://github.com/rohandahale/sphinx-vitepress/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/rohandahale/sphinx-vitepress/compare/v0.1.2...HEAD
+[0.1.2]: https://github.com/rohandahale/sphinx-vitepress/releases/tag/v0.1.2
 [0.1.1]: https://github.com/rohandahale/sphinx-vitepress/releases/tag/v0.1.1
 [0.1.0]: https://github.com/rohandahale/sphinx-vitepress/releases/tag/v0.1.0
