@@ -27,6 +27,9 @@ def setup(app: Sphinx) -> dict[str, Any]:
     app.add_config_value("vitepress_title", "", "html", str)
     app.add_config_value("vitepress_description", "", "html", str)
     app.add_config_value("vitepress_base", "/", "html", str)
+    # "details": DocumenterVitepress-style <details> docstring blocks with
+    # badges (default). "headings": plain ###-level signature headings.
+    app.add_config_value("vitepress_docstring_style", "details", "html", str)
 
     return {
         "version": __version__,

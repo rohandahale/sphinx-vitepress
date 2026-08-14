@@ -1,0 +1,68 @@
+/* Docstring <details> blocks emitted by the vitepress builder.
+   Adapted from DocumenterVitepress.jl's docstrings.css (MIT, LuxDL). */
+
+.docstring.custom-block {
+  border: 1px solid var(--vp-c-gray-2);
+  color: var(--vp-c-text-1);
+  overflow: hidden;
+}
+
+.docstring.custom-block summary {
+  font-weight: 700;
+  cursor: pointer;
+  user-select: none;
+  margin: 0 0 8px;
+}
+
+.docstring.custom-block summary a {
+  /* The summary anchor exists for deep links INTO the page; clicking the
+     summary should only toggle the block. */
+  pointer-events: none;
+  text-decoration: none;
+}
+
+.docstring-binding {
+  color: var(--vp-c-brand-1);
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.95em;
+}
+
+/* Nested member docstrings (methods inside a class) sit flush. */
+.docstring.custom-block .docstring.custom-block {
+  margin-top: 16px;
+}
+
+.docstring.custom-block .source-link {
+  border: 1px solid var(--vp-c-gray-2);
+  border-radius: 4px;
+  text-decoration: none;
+  background-color: #414040;
+  float: right;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-5px);
+  transition: all 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.docstring.custom-block .source-link a {
+  text-decoration: none;
+  color: #e5e5e5;
+}
+
+.docstring.custom-block .source-link a:hover {
+  text-decoration: underline;
+}
+
+.docstring.custom-block:hover .source-link {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+  .docstring.custom-block .source-link {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+}

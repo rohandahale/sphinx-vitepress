@@ -21,7 +21,7 @@ from sphinx_markdown_builder.contexts import (
     TableContext,
     TitleContext,
 )
-from sphinx_markdown_builder.escape import escape_markdown_chars
+from sphinx_markdown_builder.escape import escape_html_quote, escape_markdown_chars
 from sphinx_markdown_builder.translator import (
     MarkdownTranslator,
     pushing_context,
@@ -114,6 +114,10 @@ class VitepressTranslator(MarkdownTranslator):
         super().__init__(document, builder)
         self._admonition_title_pending = False
         self._vpre_literal = False
+        self._docstring_style: str = self.config.vitepress_docstring_style
+        self._desc_first_sig: list[bool] = []
+        self._sig_ids: list[str] = []
+        self._sig_name: str | None = None
 
     # -- Vue-safe text ---------------------------------------------------------
 
@@ -137,6 +141,21 @@ class VitepressTranslator(MarkdownTranslator):
         self.add("`</span>" if self._vpre_literal else "`")
         self._vpre_literal = False
         self._pop_status()
+
+    @pushing_context
+    def visit_literal_emphasis(self, _node: nodes.Element) -> None:
+        # napoleon splits type annotations like dict[str, int] into MANY
+        # adjacent literal_emphasis nodes; italicizing each one produces
+        # `*dict* *[**str*...` which markdown-it renders as literal-asterisk
+        # soup. Plain text is correct and matches how the types read.
+        self._push_context(SubContext())
+
+    @pushing_context
+    def visit_desc_annotation(self, _node: nodes.Element) -> None:
+        # Signature annotations ("class ", "property ", "= default") end up
+        # inside a fenced code signature, where italic markers would show as
+        # raw asterisks. Emit them plain.
+        self._push_context(SubContext())
 
     def visit_raw(self, node: nodes.Element) -> None:
         fmt = str(node.get("format", "")).lower()
@@ -236,13 +255,74 @@ class VitepressTranslator(MarkdownTranslator):
                 anchor = ids[0]
         self._push_context(AnchoredTitleContext(self.status.section_level, anchor))
 
-    @pushing_context
+    # -- API objects -> <details> docstring blocks (DocumenterVitepress style) --
+    #
+    # vitepress_docstring_style = "details" (default) wraps every autodoc
+    # object in `<details class="docstring custom-block" open>` with a
+    # <summary> holding the anchored binding name plus a <Badge> for the
+    # object type, followed by the full signature in a python fence — the
+    # DocumenterVitepress.jl look. "headings" keeps plain ###-level headings.
+
+    def visit_desc(self, node: nodes.Element) -> None:
+        self._push_status(desc_type=node.attributes.get("desctype", ""))
+        if self._docstring_style == "details":
+            self.add('<details class="docstring custom-block" open>', prefix_eol=2, suffix_eol=1)
+            self._desc_first_sig.append(True)
+
+    def depart_desc(self, _node: nodes.Element) -> None:
+        if self._docstring_style == "details":
+            self._desc_first_sig.pop()
+            self.add("</details>", prefix_eol=2, suffix_eol=2)
+        self._pop_status()
+
     def visit_desc_signature(self, node: nodes.Element) -> None:
         """API object signature: always anchored so cross-references resolve."""
-        for anchor in node.get("ids", []):
-            self._add_anchor(anchor)
-        h_level = 4 if node.get("class", None) else 3
-        self._push_context(TitleContext(h_level))
+        if self._docstring_style != "details":
+            for anchor in node.get("ids", []):
+                self._add_anchor(anchor)
+            h_level = 4 if node.get("class", None) else 3
+            self._push_context(TitleContext(h_level))
+            return
+        self._sig_ids = list(node.get("ids", []))
+        self._sig_name = str(node.get("fullname", "")) or None
+        # Capture the signature text raw (it lands inside a code fence).
+        self._push_status(escape_text=False)
+        self._push_context(SubContext())
+
+    def depart_desc_signature(self, _node: nodes.Element) -> None:
+        if self._docstring_style != "details":
+            self._pop_context()
+            return
+        signature_ctx = self._ctx_queue.pop()
+        signature = signature_ctx.make().strip()
+        self._pop_status()
+        self._emit_signature(signature)
+
+    def _emit_signature(self, signature: str) -> None:
+        ids = self._sig_ids
+        anchor = ids[0] if ids else ""
+        name = self._sig_name or signature.split("(")[0].strip()
+        if self._desc_first_sig and self._desc_first_sig[-1]:
+            # First signature of this object: it becomes the <summary>.
+            self._desc_first_sig[-1] = False
+            badge = escape_html_quote(self.status.desc_type or "object")
+            if anchor:
+                quoted = escape_html_quote(anchor)
+                opener, closer = f'<a id="{quoted}" href="#{quoted}">', "</a>"
+            else:
+                opener = closer = ""
+            self.add(
+                f'<summary>{opener}<span class="docstring-binding">{escape_vue(name)}</span>'
+                f'{closer} <Badge type="info" text="{badge}" /></summary>',
+                prefix_eol=1,
+                suffix_eol=2,
+            )
+            extra_ids = ids[1:]
+        else:
+            extra_ids = ids
+        for extra in extra_ids:
+            self._add_anchor(extra)
+        self.add(f"```python\n{signature}\n```", prefix_eol=2, suffix_eol=2)
 
     # -- Math ------------------------------------------------------------------
 

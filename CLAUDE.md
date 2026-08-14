@@ -39,9 +39,14 @@ the real `vitepress build`, green with strict dead links (opt-in smoke test).
 A user `.vitepress/` dir in the source overrides the bundled template
 (placeholders still substituted). Frontmatter was deferred from M2 to M3
 (VitePress derives titles from the h1, so nothing needed it yet).
-Next milestone: **M3** — theme parity with DocumenterVitepress (port
-style.css/docstrings.css/theme index.ts, docstring `<details>` blocks).
-See DESIGN.md §F.
+**M3 done** (2026-08-14): DocumenterVitepress theme ported (style.css /
+docstrings.css / theme index.ts → `template/theme/`, attribution in NOTICE.md);
+autodoc objects now render as `<details class="docstring custom-block">` with
+anchored summary bindings + `<Badge>` type labels + fenced signatures
+(`vitepress_docstring_style = "headings"` restores plain headings); fixed the
+napoleon `literal_emphasis` adjacent-italics bug that rendered `*[*` asterisk
+soup in Parameters lists. Next: **M4** — objects.inv emission + versioned
+deploy (+ source-link badges via viewcode/linkcode). See DESIGN.md §F.
 
 ## Architecture in one paragraph
 

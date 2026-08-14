@@ -12,9 +12,13 @@ in the same commit as any port.
   (MIT, Clay Risser), originally based on `doctree2md` from nb2plots
   (BSD-2-Clause, Matthew Brett).
 - **DocumenterVitepress.jl** — MIT, Copyright (c) 2023 LuxDL contributors
-  (<https://github.com/LuxDL/DocumenterVitepress.jl>). *(pending)* theme CSS
-  (`style.css`, `docstrings.css`), theme `index.ts`, config.mts template structure,
-  and the versioned-deploy design (`bases.txt`/`siteinfo.js`/`versions.js`).
+  (<https://github.com/LuxDL/DocumenterVitepress.jl>). **Ported** (adapted):
+  theme CSS (`src/sphinx_vitepress/template/theme/style.css` and
+  `docstrings.css` derive from its `template/src/.vitepress/theme/` files),
+  theme `index.ts` structure, the placeholder-substitution config.mts pattern,
+  and the `<details>` docstring block markup emitted by our translator.
+  *(pending)* the versioned-deploy design (`bases.txt`/`siteinfo.js`/
+  `versions.js`) and `VersionPicker.vue`.
 - **Makie.jl** — MIT (<https://github.com/MakieOrg/Makie.jl>). *(pending)*
   `VersionPicker.vue`, via DocumenterVitepress.jl.
 - **VitePress** — MIT, Copyright (c) 2019–present Evan You and VitePress contributors

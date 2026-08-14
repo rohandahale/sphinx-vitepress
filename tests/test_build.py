@@ -56,6 +56,8 @@ def test_basic_rst(tmp_path: Path) -> None:
     assert '"link": "/other"' in config
     assert "__SVP_" not in config, "all placeholders must be substituted"
     assert (tmp_path / "package.json").exists()
+    assert (tmp_path / ".vitepress" / "theme" / "style.css").exists()
+    assert (tmp_path / ".vitepress" / "theme" / "docstrings.css").exists()
 
 
 def test_myst(tmp_path: Path) -> None:

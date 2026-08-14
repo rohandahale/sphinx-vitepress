@@ -61,8 +61,14 @@ def write_project_files(builder: VitepressBuilder) -> None:
         content = content.replace(placeholder, value)
     (out_vp / "config.mts").write_text(content, encoding="utf-8")
 
+    # Theme: the user's own .vitepress/theme (already copied above) wins;
+    # otherwise ship the bundled DocumenterVitepress-derived theme.
+    theme_dst = out_vp / "theme"
+    if not theme_dst.exists():
+        shutil.copytree(TEMPLATE_DIR / "theme", theme_dst)
+
     user_package = srcdir / "package.json"
     package_source = user_package if user_package.is_file() else TEMPLATE_DIR / "package.json"
     shutil.copyfile(package_source, outdir / "package.json")
 
-    logger.info("sphinx-vitepress: wrote .vitepress/config.mts and package.json")
+    logger.info("sphinx-vitepress: wrote .vitepress/config.mts, theme, and package.json")

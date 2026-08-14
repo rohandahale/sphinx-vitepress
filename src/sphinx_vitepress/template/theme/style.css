@@ -1,0 +1,179 @@
+/* sphinx-vitepress default theme styling.
+   Adapted from DocumenterVitepress.jl's style.css (MIT, LuxDL) — the same
+   brand palette and component treatment, minus Julia-specific pieces.
+   Override CSS variables here or in overrides.css:
+   https://github.com/vuejs/vitepress/blob/main/src/client/theme-default/styles/vars.css */
+
+.VPHero .clip {
+  white-space: pre;
+  max-width: 600px;
+}
+
+:root {
+  scroll-behavior: smooth;
+
+  /* Typography */
+  --vp-font-family-base: "Barlow", "Inter var experimental", "Inter var",
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
+    Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+}
+
+/* Colors */
+:root {
+  --svp-blue: #4063d8;
+  --svp-purple: #9558b2;
+  --svp-red: #cb3c33;
+  --svp-green: #389826;
+
+  --vp-c-brand: #0087d7;
+  --vp-c-brand-1: #0890df;
+  --vp-c-brand-2: #0599ef;
+  --vp-c-brand-3: #0c9ff4;
+  --vp-c-brand-light: #0087d7;
+  --vp-c-brand-dark: #5fd7ff;
+  --vp-c-brand-dimm: #212425;
+
+  /* Greens */
+  --vp-dark-green: #155f3e;
+  --vp-dark-green-dark: #2b855c;
+  --vp-dark-green-light: #42d392;
+  --vp-dark-green-lighter: #35eb9a;
+
+  /* Complementary colors */
+  --vp-dark-gray: #1e1e1e;
+  --vp-dark-gray-soft: #2a2a2a;
+  --vp-dark-gray-mute: #242424;
+  --vp-light-gray: #d1d5db;
+  --vp-tip-bg: rgb(254, 254, 254);
+
+  /* Text colors */
+  --vp-dark-text: #e5e5e5;
+  --vp-dark-subtext: #c1c1c1;
+  --vp-source-text: #e5e5e5;
+
+  /* Custom tip */
+  --vp-custom-block-tip-border: var(--vp-c-brand-light);
+  --vp-custom-block-tip-bg: var(--vp-tip-bg);
+}
+
+/* Reset text color of code blocks to default text color.
+   VitePress uses --vp-c-brand-1 by default, which makes code look like links. */
+:root {
+  --vp-code-color: var(--vp-c-text-1);
+}
+.custom-block.tip code {
+  color: var(--vp-c-text-1);
+  background-color: var(--vp-code-bg);
+}
+.custom-block.tip a > code {
+  color: var(--vp-c-tip-1);
+}
+
+/* Component: Button */
+:root {
+  --vp-button-brand-border: var(--vp-light-gray);
+  --vp-button-brand-bg: var(--vp-c-brand-light);
+  --vp-button-brand-hover-border: var(--vp-c-bg-alt);
+  --vp-button-brand-hover-bg: var(--svp-blue);
+}
+
+/* Component: Home hero */
+:root {
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: -webkit-linear-gradient(120deg, #9558b2 30%, #cb3c33);
+  --vp-home-hero-image-background-image: linear-gradient(
+    -145deg,
+    #9558b282 30%,
+    #3798269a 30%,
+    #cb3d33e3
+  );
+  --vp-home-hero-image-filter: blur(40px);
+}
+
+:root.dark {
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: -webkit-linear-gradient(
+    120deg,
+    var(--svp-purple) 15%,
+    var(--vp-dark-green-light),
+    var(--vp-dark-green)
+  );
+  --vp-home-hero-image-background-image: linear-gradient(
+    -45deg,
+    var(--vp-dark-green) 30%,
+    var(--vp-dark-green-light),
+    var(--vp-dark-gray) 30%
+  );
+  --vp-home-hero-image-filter: blur(56px);
+}
+
+:root.dark {
+  --vp-custom-block-tip-border: var(--vp-dark-green-dark);
+  --vp-custom-block-tip-text: var(--vp-dark-subtext);
+  --vp-custom-block-tip-bg: var(--vp-dark-gray-mute);
+}
+
+/* Link colors (dark mode) */
+.dark {
+  --vp-c-brand: var(--vp-dark-green-light);
+  --vp-button-brand-border: var(--vp-dark-green-lighter);
+  --vp-button-brand-bg: var(--vp-dark-green);
+  --vp-c-brand-1: var(--vp-dark-green-light);
+  --vp-c-brand-2: var(--vp-dark-green-lighter);
+  --vp-c-brand-3: var(--vp-dark-green);
+}
+
+@media (min-width: 640px) {
+  :root {
+    --vp-home-hero-image-filter: blur(56px);
+  }
+}
+
+@media (min-width: 960px) {
+  :root {
+    --vp-home-hero-image-filter: blur(72px);
+  }
+}
+
+/* Component: MathJax */
+.mjx-scroll-wrapper {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  text-align: center;
+}
+
+mjx-container {
+  display: inline-block;
+  padding: 0.5rem 0;
+  margin: auto 2px -2px;
+  overflow: visible !important;
+  text-align: left;
+}
+
+mjx-container > svg {
+  display: inline-block;
+  height: auto;
+}
+
+mjx-container svg path {
+  fill: currentColor !important;
+  stroke: currentColor !important;
+}
+
+/* Output-style (language-less) code blocks */
+:root {
+  --vp-c-bg-output: #fbfbfb;
+  --vp-c-bg-output-outline: #e2e2e3;
+}
+
+.dark {
+  --vp-c-bg-output: #1a1a1a;
+  --vp-c-bg-output-outline: #2e2e32;
+}
+
+.language- {
+  background-color: var(--vp-c-bg-output) !important;
+  outline: 1px solid var(--vp-c-bg-output-outline);
+}

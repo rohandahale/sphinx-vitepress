@@ -2,6 +2,7 @@
 DocumenterVitepress.jl-0.3.5/
 
 # Python
+_build/
 __pycache__/
 *.py[cod]
 .venv/
