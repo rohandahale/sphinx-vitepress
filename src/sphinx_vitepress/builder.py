@@ -38,7 +38,10 @@ class VitepressBuilder(MarkdownBuilder):
             previous = self._version_stamp.read_text(encoding="utf-8").strip()
         except OSError:
             previous = None
-        self._rewrite_all = previous != sphinx_vitepress.__version__
+        version = sphinx_vitepress.__version__
+        # Pre-release installs (editable checkouts, .devN) change output
+        # without changing the version string, so never trust their stamp.
+        self._rewrite_all = previous != version or "dev" in version
 
     def get_outdated_docs(self) -> Iterator[str]:
         if self._rewrite_all:

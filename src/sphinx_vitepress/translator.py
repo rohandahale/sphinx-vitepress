@@ -12,6 +12,7 @@ The behavioral reference is DocumenterVitepress.jl's ``src/writer.jl``
 
 from __future__ import annotations
 
+import posixpath
 from typing import TYPE_CHECKING
 
 from docutils import nodes
@@ -59,6 +60,13 @@ FENCE_LANGUAGE_REMAP: dict[str, str] = {
     "none": "",
     "text": "",
 }
+
+#: Pages the Sphinx HTML builders synthesize but that have no VitePress
+#: equivalent (its built-in local search replaces them). Nearly every
+#: Sphinx project's index page links to these, and VitePress fails builds
+#: on dead links, so the links are emitted as plain text instead.
+#: Genuinely broken links are left alone — VitePress *should* catch those.
+VIRTUAL_PAGES = frozenset({"genindex", "modindex", "py-modindex", "search"})
 
 _VERSIONMODIFIED_KINDS: dict[str, str] = {
     "versionadded": "tip",
@@ -146,7 +154,7 @@ class VitepressTranslator(MarkdownTranslator):
 
     @pushing_context
     def visit_reference(self, node: nodes.Element) -> None:
-        if self._in_signature:
+        if self._in_signature or self._is_virtual_page_ref(node):
             # Signatures land inside a code fence: a markdown link would show
             # as literal [name](url) noise, so render just the text.
             # (Intersphinx-linked type annotations trigger this.)
@@ -154,12 +162,29 @@ class VitepressTranslator(MarkdownTranslator):
             return
         super().visit_reference(node)
 
+    def _is_virtual_page_ref(self, node: nodes.Element) -> bool:
+        if not node.get("internal", self.status.default_ref_internal):
+            return False
+        uri = node.get("refuri", "")
+        if not uri or "://" in uri:
+            return False
+        target = posixpath.basename(uri.split("#")[0])
+        suffix = self.config.markdown_uri_doc_suffix
+        if suffix and target.endswith(suffix):
+            target = target[: -len(suffix)]
+        return target in VIRTUAL_PAGES
+
     @pushing_context
     def visit_field_name(self, _node: nodes.Element) -> None:
-        # Trailing space after the bold marker: "**Parameters:** value" —
-        # without it, the soft line break between field name and body can
-        # render with no visual gap.
         self._push_context(WrappedContext("**", ":** "))
+
+    @pushing_context
+    def visit_field_body(self, _node: nodes.Element) -> None:
+        # Start the body on the SAME line as the field name: with a line
+        # break between them, CommonMark strips the single trailing space
+        # and the soft break renders with no visual gap
+        # ("Parameters:temperature").
+        self._push_context(SubContext(SubContextParams(0, 1)))
 
     @pushing_context
     def visit_literal_emphasis(self, _node: nodes.Element) -> None:
