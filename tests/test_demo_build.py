@@ -7,7 +7,7 @@ from pathlib import Path
 import pytest
 from sphinx.cmd.build import build_main
 
-DEMO_DOCS = Path(__file__).parent.parent / "demo" / "docs"
+DEMO_DOCS = Path(__file__).parent / "demo" / "docs"
 
 
 def test_demo_builds(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -24,8 +24,17 @@ def test_demo_builds(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     assert '<Badge type="info" text="class" />' in api
     assert '<Badge type="info" text="property" />' in api
     assert '<Badge class="source-link"' in api, "linkcode must produce source badges"
-    assert "blob/main/demo/vpdemo/core.py" in api
+    assert "blob/main/tests/demo/vpdemo/core.py" in api
     assert "```python\nvpdemo.core.blackbody_flux(temperature: float)" in api
+    # The [source] link becomes the badge; it must not also print inside
+    # the signature fence.
+    assert "[source]" not in api
+    # A multi-parameter field body is a list, which needs its own line or
+    # its first bullet is swallowed into the "Parameters:" heading.
+    assert "**Parameters:** * " not in api
+    assert "* **Parameters:**\n  * **flux_jy**" in api
+    # A single-parameter body stays on the heading's line.
+    assert "* **Parameters:** **temperature**" in api
     assert api.count("</details>") == api.count('<details class="docstring custom-block" open>')
     assert "*[*" not in api, "napoleon type annotations must not emit emphasis soup"
     assert "&#123;&#123;" in api, "docstring mustaches must be Vue-escaped"

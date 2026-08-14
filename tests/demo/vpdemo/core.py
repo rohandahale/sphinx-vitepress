@@ -52,6 +52,31 @@ def blackbody_flux(temperature: float) -> float:
     return SIGMA_SB * temperature**4
 
 
+def brightness_temperature(flux_jy: float, frequency_hz: float, solid_angle_sr: float) -> float:
+    """Rayleigh-Jeans brightness temperature of a resolved source.
+
+    Several parameters, so the field body renders as a list — the case that
+    regressed once when field names and bodies were put on one line.
+
+    Parameters
+    ----------
+    flux_jy : float
+        Flux density in jansky.
+    frequency_hz : float
+        Observing frequency in hertz.
+    solid_angle_sr : float
+        Source solid angle in steradian.
+
+    Returns
+    -------
+    float
+        Brightness temperature in kelvin.
+    """
+    k_b = 1.380649e-23
+    intensity = flux_jy * 1e-26 / solid_angle_sr
+    return intensity * (299792458.0 / frequency_hz) ** 2 / (2 * k_b)
+
+
 @dataclass
 class CatalogEntry:
     """A single source in a catalog.

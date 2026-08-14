@@ -69,6 +69,18 @@ FENCE_LANGUAGE_REMAP: dict[str, str] = {
 VIRTUAL_PAGES = frozenset({"genindex", "modindex", "py-modindex", "search"})
 
 
+def _is_source_link(reference: nodes.Element) -> bool:
+    """Whether a reference is the ``[source]`` link on a signature.
+
+    Both linkcode and viewcode mark their link's text with the
+    ``viewcode-link`` class, which is what distinguishes it from the
+    intersphinx-resolved type annotations that also appear in signatures.
+    """
+    return any(
+        "viewcode-link" in inline.get("classes", []) for inline in reference.findall(nodes.inline)
+    )
+
+
 def _find_source_url(signature: nodes.Element) -> str | None:
     """URL of the ``[source]`` link Sphinx attached to a signature, if any.
 
@@ -77,10 +89,11 @@ def _find_source_url(signature: nodes.Element) -> str | None:
     does not produce — so only absolute links are used.
     """
     for reference in signature.findall(nodes.reference):
-        if "viewcode-link" not in reference.get("classes", []) and not reference.get("internal"):
-            uri = reference.get("refuri", "")
-            if uri and "://" in uri:
-                return str(uri)
+        if not _is_source_link(reference):
+            continue
+        uri = reference.get("refuri", "")
+        if uri and "://" in uri:
+            return str(uri)
     return None
 
 
@@ -171,6 +184,10 @@ class VitepressTranslator(MarkdownTranslator):
 
     @pushing_context
     def visit_reference(self, node: nodes.Element) -> None:
+        if self._in_signature and _is_source_link(node):
+            # Already rendered as the summary's "source" badge; letting it
+            # through would print a literal [source] inside the signature.
+            raise nodes.SkipNode
         if self._in_signature or self._is_virtual_page_ref(node):
             # Signatures land inside a code fence: a markdown link would show
             # as literal [name](url) noise, so render just the text.
@@ -191,6 +208,16 @@ class VitepressTranslator(MarkdownTranslator):
             target = target[: -len(suffix)]
         return target in VIRTUAL_PAGES
 
+    @pushing_context
+    def visit_abbreviation(self, node: nodes.Element) -> None:
+        explanation = node.get("explanation")
+        if explanation:
+            self._push_context(
+                WrappedContext(f'<abbr title="{escape_html_quote(explanation)}">', "</abbr>")
+            )
+        else:
+            self._push_context(SubContext())
+
     def visit_compound(self, node: nodes.Element) -> None:
         # Sphinx renders a toctree inline as a nested link list. VitePress
         # already shows exactly those links in its sidebar, so repeating
@@ -204,15 +231,25 @@ class VitepressTranslator(MarkdownTranslator):
 
     @pushing_context
     def visit_field_name(self, _node: nodes.Element) -> None:
-        self._push_context(WrappedContext("**", ":** "))
+        self._push_context(WrappedContext("**", ":**"))
 
     @pushing_context
-    def visit_field_body(self, _node: nodes.Element) -> None:
-        # Start the body on the SAME line as the field name: with a line
-        # break between them, CommonMark strips the single trailing space
-        # and the soft break renders with no visual gap
-        # ("Parameters:temperature").
-        self._push_context(SubContext(SubContextParams(0, 1)))
+    def visit_field_body(self, node: nodes.Element) -> None:
+        # Start the body on the SAME line as the field name, since a line
+        # break there loses the separating space and renders as
+        # "Parameters:temperature". A body that is itself a list must keep
+        # its own line, or its first bullet is swallowed into the heading.
+        starts_with_list = any(
+            isinstance(child, (nodes.bullet_list, nodes.enumerated_list))
+            for child in node.children[:1]
+        )
+        if starts_with_list:
+            self._push_context(SubContext(SubContextParams(1, 1)))
+        else:
+            # The separating space belongs to the body, so a body that does
+            # start on its own line leaves no trailing space behind.
+            self._push_context(SubContext(SubContextParams(0, 1)))
+            self.add(" ")
 
     @pushing_context
     def visit_literal_emphasis(self, _node: nodes.Element) -> None:

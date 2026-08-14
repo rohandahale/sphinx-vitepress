@@ -17,7 +17,7 @@ import pytest
 
 from sphinx_vitepress.cli import main as cli_main
 
-DEMO_DOCS = Path(__file__).parent.parent / "demo" / "docs"
+DEMO_DOCS = Path(__file__).parent / "demo" / "docs"
 
 pytestmark = pytest.mark.skipif(
     not os.environ.get("VITEPRESS_SMOKE"),

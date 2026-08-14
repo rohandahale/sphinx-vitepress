@@ -1,4 +1,4 @@
-"""vpdemo — a tiny astronomy-flavored package used to dogfood sphinx-vitepress.
+"""vpdemo — a tiny astronomy-flavored package for testing sphinx-vitepress.
 
 Its docstrings are deliberately hostile to VitePress: they contain Vue
 mustaches, angle brackets, math, doctests, tables, and every napoleon section

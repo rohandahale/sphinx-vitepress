@@ -16,7 +16,7 @@ from pathlib import Path
 import pytest
 from sphinx.cmd.build import build_main
 
-DEMO_DOCS = Path(__file__).parent.parent / "demo" / "docs"
+DEMO_DOCS = Path(__file__).parent / "demo" / "docs"
 ROOTS = Path(__file__).parent / "roots"
 
 

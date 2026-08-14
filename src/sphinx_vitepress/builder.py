@@ -58,6 +58,15 @@ class VitepressBuilder(MarkdownBuilder):
             yield from super().get_outdated_docs()
 
     def write_doc(self, docname: str, doctree: nodes.document) -> None:
+        """Write one page, then prepend its configured frontmatter.
+
+        Parameters
+        ----------
+        docname : str
+            Sphinx name of the document being written.
+        doctree : docutils.nodes.document
+            Its resolved doctree.
+        """
         prune_virtual_page_links(doctree, self.config.markdown_uri_doc_suffix)
         super().write_doc(docname, doctree)
         block = frontmatter.render(self.config.vitepress_frontmatter.get(docname, {}))

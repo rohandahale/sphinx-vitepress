@@ -26,7 +26,7 @@ def linkcode_resolve(domain, info):
     if domain != "py" or not info.get("module"):
         return None
     path = info["module"].replace(".", "/")
-    return f"{_REPO}/blob/main/demo/{path}.py"
+    return f"{_REPO}/blob/main/tests/demo/{path}.py"
 
 
 myst_enable_extensions = ["dollarmath"]
