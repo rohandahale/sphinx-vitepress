@@ -46,6 +46,17 @@ anchored summary bindings + `<Badge>` type labels + fenced signatures
 (`vitepress_docstring_style = "headings"` restores plain headings); fixed the
 napoleon `literal_emphasis` adjacent-italics bug that rendered `*[*` asterisk
 soup in Parameters lists.
+**M5 in progress** (2026-08-14): site chrome (edit links from git-derived
+paths, GitHub icon, footer/copyright from Sphinx's own `copyright`, logo and
+favicon from `html_logo`/`html_favicon`), hero landing pages via
+`vitepress_frontmatter`, and user-selectable accent palettes
+(`vitepress_accent`, matplotlib-colormap presets; default blue). Inline
+toctrees and dead genindex/search navigation are pruned. **Validated against
+a real third-party project** (rohandahale/ehteval — furo, 6 pages,
+intersphinx): builds warning-free and passes strict `vitepress build`.
+Remaining for 0.1.0: source-link badges (viewcode/linkcode), self-hosted
+docs, `noindex` on non-stable versions, sphinx-design tabs, PyPI release.
+
 **M4 done** (2026-08-14): `objects.inv` emitted to `public/` (site root) with
 `.html` URIs — round-trip proven by a test where a second Sphinx project
 resolves `:py:func:` refs INTO the built demo site; versioned deploys ported
