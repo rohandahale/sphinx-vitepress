@@ -11,8 +11,23 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.napoleon",
     "sphinx.ext.intersphinx",
+    "sphinx.ext.linkcode",
     "myst_parser",
 ]
+
+_REPO = "https://github.com/rohandahale/sphinx-vitepress"
+
+
+def linkcode_resolve(domain, info):
+    """Link each documented object to its source on GitHub.
+
+    sphinx-vitepress turns this into a "source" badge on the docstring card.
+    """
+    if domain != "py" or not info.get("module"):
+        return None
+    path = info["module"].replace(".", "/")
+    return f"{_REPO}/blob/main/demo/{path}.py"
+
 
 myst_enable_extensions = ["dollarmath"]
 napoleon_google_docstring = False

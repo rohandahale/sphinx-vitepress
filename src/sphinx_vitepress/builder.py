@@ -30,6 +30,11 @@ class VitepressBuilder(MarkdownBuilder):
 
     default_translator_class = VitepressTranslator
 
+    #: sphinx.ext.linkcode gates its [source] links behind `only:: html`
+    #: unless a builder claims support. Ours become "source" badges on the
+    #: docstring cards, so opt in under this builder's own tag.
+    supported_linkcode = name
+
     def init(self) -> None:
         super().init()
         # The base class treats a doc as up to date when the target .md is

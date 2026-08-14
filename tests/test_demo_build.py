@@ -23,6 +23,8 @@ def test_demo_builds(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     assert '<Badge type="info" text="function" />' in api
     assert '<Badge type="info" text="class" />' in api
     assert '<Badge type="info" text="property" />' in api
+    assert '<Badge class="source-link"' in api, "linkcode must produce source badges"
+    assert "blob/main/demo/vpdemo/core.py" in api
     assert "```python\nvpdemo.core.blackbody_flux(temperature: float)" in api
     assert api.count("</details>") == api.count('<details class="docstring custom-block" open>')
     assert "*[*" not in api, "napoleon type annotations must not emit emphasis soup"

@@ -68,6 +68,22 @@ FENCE_LANGUAGE_REMAP: dict[str, str] = {
 #: Genuinely broken links are left alone — VitePress *should* catch those.
 VIRTUAL_PAGES = frozenset({"genindex", "modindex", "py-modindex", "search"})
 
+
+def _find_source_url(signature: nodes.Element) -> str | None:
+    """URL of the ``[source]`` link Sphinx attached to a signature, if any.
+
+    ``linkcode`` emits an absolute repository URL; ``viewcode`` emits a
+    relative link into its generated ``_modules`` pages, which this builder
+    does not produce — so only absolute links are used.
+    """
+    for reference in signature.findall(nodes.reference):
+        if "viewcode-link" not in reference.get("classes", []) and not reference.get("internal"):
+            uri = reference.get("refuri", "")
+            if uri and "://" in uri:
+                return str(uri)
+    return None
+
+
 _VERSIONMODIFIED_KINDS: dict[str, str] = {
     "versionadded": "tip",
     "versionchanged": "info",
@@ -127,6 +143,7 @@ class VitepressTranslator(MarkdownTranslator):
         self._desc_first_sig: list[bool] = []
         self._sig_ids: list[str] = []
         self._sig_name: str | None = None
+        self._sig_source_url: str | None = None
         self._in_signature = False
 
     # -- Vue-safe text ---------------------------------------------------------
@@ -340,6 +357,7 @@ class VitepressTranslator(MarkdownTranslator):
             return
         self._sig_ids = list(node.get("ids", []))
         self._sig_name = str(node.get("fullname", "")) or None
+        self._sig_source_url = _find_source_url(node)
         # Capture the signature text raw (it lands inside a code fence).
         self._in_signature = True
         self._push_status(escape_text=False)
@@ -354,6 +372,22 @@ class VitepressTranslator(MarkdownTranslator):
         self._pop_status()
         self._in_signature = False
         self._emit_signature(signature)
+
+    def _source_link(self) -> str:
+        """A "source" badge linking into the repository, DV-style.
+
+        ``sphinx.ext.linkcode`` (and ``viewcode`` with a repo configured)
+        attach the resolved URL to the signature node; without either
+        extension there is simply no badge.
+        """
+        url = self._sig_source_url
+        if not url:
+            return ""
+        return (
+            f'<Badge class="source-link" type="info">'
+            f'<a href="{escape_html_quote(url)}" target="_blank" rel="noreferrer">source</a>'
+            f"</Badge>"
+        )
 
     def _emit_signature(self, signature: str) -> None:
         ids = self._sig_ids
@@ -370,7 +404,7 @@ class VitepressTranslator(MarkdownTranslator):
                 opener = closer = ""
             self.add(
                 f'<summary>{opener}<span class="docstring-binding">{escape_vue(name)}</span>'
-                f'{closer} <Badge type="info" text="{badge}" /></summary>',
+                f'{closer} <Badge type="info" text="{badge}" />{self._source_link()}</summary>',
                 prefix_eol=1,
                 suffix_eol=2,
             )
