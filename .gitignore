@@ -1,0 +1,26 @@
+# Local reference copy of the Julia implementation (MIT, study material only)
+DocumenterVitepress.jl-0.3.5/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+build/
+dist/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Node / VitePress
+node_modules/
+**/.vitepress/cache/
+**/.vitepress/dist/
+
+# OS / editor
+.DS_Store
+
+# Claude Code local overrides
+.claude/settings.local.json

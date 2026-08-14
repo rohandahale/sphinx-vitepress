@@ -1,0 +1,81 @@
+# CLAUDE.md
+
+## What this project is
+
+**sphinx-vitepress** (working name; verified unclaimed on PyPI 2026-08-14) — the Python
+equivalent of [DocumenterVitepress.jl](https://github.com/LuxDL/DocumenterVitepress.jl):
+a Sphinx **builder** that emits VitePress-flavored Markdown plus a generated
+`.vitepress/config.mts` and theme, so any Sphinx project (autodoc + napoleon +
+intersphinx + MyST) gets a modern VitePress site instead of classic Sphinx HTML.
+A CLI (`sphinx-vitepress init|dev|build|deploy`) orchestrates the Node/VitePress build
+and versioned GitHub Pages deploys.
+
+Structural analogy: `Sphinx : sphinx-vitepress :: Documenter.jl : DocumenterVitepress.jl`.
+
+**Visual target:** https://luxdl.github.io/DocumenterVitepress.jl/stable/ — theme parity
+with that site is an explicit goal (milestone M3).
+
+## Source of truth
+
+- `DESIGN.md` — full verified architecture, milestones M0–M5, risk register. Read it
+  before implementing anything.
+- `DocumenterVitepress.jl-0.3.5/` — local copy of the reference implementation
+  (gitignored, MIT). Consult it instead of guessing:
+  - `src/writer.jl` — the markdown flavor to emit (admonitions, `{#id}` anchors,
+    docstring `<details>` blocks, `<`/`>` escaping)
+  - `src/vitepress_config.jl` — config.mts generation via placeholder substitution
+  - `src/frontmatter.jl` — YAML frontmatter merging
+  - `src/DocumenterVitepress.jl` — versioned deploy (bases.txt / siteinfo.js / versions.js)
+  - `template/src/.vitepress/` — theme, CSS, VersionPicker.vue, config template
+
+## Status
+
+Pre-code: scaffold only (2026-08-14). Next milestone: **M0** — pyproject, src layout,
+demo package, CI. See DESIGN.md §F.
+
+## Architecture in one paragraph
+
+Sphinx does all extraction and cross-reference resolution (autodoc, napoleon,
+intersphinx, MyST are read-side extensions — zero work for us; users keep their
+`conf.py`). Our `VitepressBuilder`/`VitepressTranslator` subclass
+`sphinx-markdown-builder` (MIT, pinned `>=0.6.10,<0.7`) and emit VitePress markdown;
+`finish()` generates the sidebar/nav from `env.toctree_includes` + `env.titles`,
+renders `config.mts` from a placeholder template, copies the theme, and writes
+`objects.inv` via `sphinx.util.inventory.InventoryFile.dump`. Node is never required
+at markdown-emission time — only the CLI shells out to `npm` / `npx vitepress`.
+Target VitePress 1.6.x; CI tracks 2.0-alpha.
+
+## Conventions
+
+- Python ≥ 3.11; `uv` for everything; hatchling backend; src layout
+- Lint/format: `uv run ruff check .` + `uv run ruff format .` before finishing a task;
+  mypy on `src/`
+- Tests: pytest; translator/renderer changes REQUIRE golden-file tests
+  (Sphinx source in → expected `.md` out)
+- Docstrings in this codebase: NumPy style, full type hints
+- Windows is a supported platform: subprocess with list args (no shell), `posixpath`
+  for URIs, resolve `npm.cmd` on Windows
+- The top recurring bug class will be Vue-safety: `{{ }}`, `<`/`>`, and raw HTML in
+  generated markdown are compiled by Vue and can fail the VitePress build. ALL text
+  escaping goes through `escape.py` — never inline ad-hoc escaping.
+
+## Commands
+
+Current (scaffold stage): none — no package yet. After M0, keep this section updated:
+
+- `uv sync` · `uv run pytest` · `uv run ruff check . && uv run ruff format .`
+- `uv run sphinx-build -b vitepress demo/docs build/markdown`
+- `uv run sphinx-vitepress dev demo/docs`
+
+## Hard-won facts (do not re-litigate)
+
+- `sphinx-vitepress` and `sphinx-notes-vitepress` did NOT exist on PyPI (2026-08-14);
+  the original research for this project came from a Gemini chat that fabricated them.
+  Verify EVERY new dependency at `https://pypi.org/pypi/<name>/json` before adding it.
+- Intersphinx costs the builder nothing: by `write_doc` time, external refs are plain
+  `reference` nodes with absolute `refuri`.
+- VitePress fails builds on dead links by default, and compiles `{{ }}`/raw HTML in
+  prose as Vue templates; fenced code blocks are auto-`v-pre`.
+- Licensing: ours is MIT. Porting code/CSS from sphinx-markdown-builder (MIT),
+  DocumenterVitepress.jl (MIT), or Makie's VersionPicker.vue (MIT) requires keeping
+  their notices — record every port in NOTICE.md in the same commit.
