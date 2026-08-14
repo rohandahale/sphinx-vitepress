@@ -8,7 +8,7 @@ version = "0.1.1"
 description = "A Sphinx builder that renders your documentation with VitePress."
 readme = "README.md"
 license = "MIT"
-license-files = ["LICENSE", "NOTICE.md"]
+license-files = ["LICENSE"]
 authors = [{ name = "Rohan Dahale", email = "astrorohandahale@gmail.com" }]
 requires-python = ">=3.11"
 keywords = ["sphinx", "vitepress", "documentation", "builder", "markdown", "autodoc"]

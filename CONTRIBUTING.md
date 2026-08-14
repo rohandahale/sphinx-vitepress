@@ -48,8 +48,8 @@ VITEPRESS_SMOKE=1 uv run pytest tests/test_vitepress_smoke.py
 - **Windows is supported.** Use `posixpath` for URIs and pass list arguments to
   `subprocess` (no shell); CI runs the suite on Windows.
 - Ports from other projects (sphinx-markdown-builder, DocumenterVitepress.jl,
-  Makie.jl) must keep their notices. Record every one in `NOTICE.md` in the
-  same commit.
+  Makie.jl) must keep their notices. Record every one in the third-party
+  section of `LICENSE` in the same commit.
 
 ## Releasing
 

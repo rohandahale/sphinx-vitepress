@@ -1,6 +1,6 @@
 <!-- Version dropdown for versioned deploys.
      Adapted from DocumenterVitepress.jl's VersionPicker.vue (MIT, LuxDL),
-     itself adapted from Makie.jl (MIT). See NOTICE.md.
+     itself adapted from Makie.jl (MIT). See the sphinx-vitepress LICENSE.
 
      Reads window.DOC_VERSIONS (from <root>/versions.js) and
      window.DOCS_CURRENT_VERSION (from <base>/siteinfo.js); both scripts are

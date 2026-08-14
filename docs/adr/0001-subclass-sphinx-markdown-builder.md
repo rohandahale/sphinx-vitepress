@@ -20,4 +20,5 @@ VitePress markdown diverges from GitHub markdown.
 If subclassing turns brittle across upstream releases, vendor
 `translator.py`, `contexts.py`, and `escape.py` into
 `sphinx_vitepress/_vendor/`, retaining the MIT headers and updating
-NOTICE.md (including the doctree2md BSD-2 ancestry).
+the third-party section of LICENSE (including the doctree2md BSD-2
+ancestry).

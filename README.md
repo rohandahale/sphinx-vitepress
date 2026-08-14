@@ -48,4 +48,5 @@ sphinx-vitepress deploy docs --deploy-dir _site --release v1.2.3 --repo-base /my
 
 ## License
 
-MIT. See [LICENSE](LICENSE) and [NOTICE.md](NOTICE.md).
+MIT. See [LICENSE](LICENSE), which also carries the notices for the
+MIT-licensed projects this one adapts code from.
