@@ -50,6 +50,13 @@ class _HtmlUriBuilder:
 
 
 def write_inventory(builder: VitepressBuilder) -> None:
+    """Write ``objects.inv`` for the built site.
+
+    Parameters
+    ----------
+    builder : sphinx_vitepress.builder.VitepressBuilder
+        The running builder; its output directory receives the file.
+    """
     public = Path(builder.outdir) / "public"
     public.mkdir(parents=True, exist_ok=True)
     target = public / "objects.inv"

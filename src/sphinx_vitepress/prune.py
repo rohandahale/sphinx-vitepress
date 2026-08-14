@@ -81,6 +81,16 @@ def _collapse_upward(node: nodes.Element | None) -> None:
 
 
 def prune_virtual_page_links(doctree: nodes.document, suffix: str) -> None:
+    """Remove links to pages this builder does not generate.
+
+    Parameters
+    ----------
+    doctree : docutils.nodes.document
+        The resolved doctree, modified in place.
+    suffix : str
+        The URI suffix internal links carry, so a target can be matched
+        against the virtual page names.
+    """
     emptied: list[nodes.Element] = []
     for ref in list(doctree.findall(nodes.reference)):
         if not _is_virtual(ref, suffix):

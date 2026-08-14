@@ -11,22 +11,10 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.napoleon",
     "sphinx.ext.intersphinx",
-    "sphinx.ext.linkcode",
     "myst_parser",
 ]
 
 _REPO = "https://github.com/rohandahale/sphinx-vitepress"
-
-
-def linkcode_resolve(domain, info):
-    """Link each documented object to its source on GitHub.
-
-    sphinx-vitepress turns this into a "source" badge on the docstring card.
-    """
-    if domain != "py" or not info.get("module"):
-        return None
-    path = info["module"].replace(".", "/")
-    return f"{_REPO}/blob/main/tests/demo/{path}.py"
 
 
 myst_enable_extensions = ["dollarmath"]
@@ -42,7 +30,9 @@ else:
 exclude_patterns = ["_build"]
 
 # sphinx-vitepress: navbar GitHub icon + per-page edit links + footer.
-vitepress_repo = "https://github.com/rohandahale/sphinx-vitepress"
+vitepress_repo = _REPO
+# Each documented object links to the exact lines defining it.
+vitepress_source_url = f"{_REPO}/blob/main"
 vitepress_footer_message = "Built with sphinx-vitepress"
 copyright = "2026, Rohan Dahale"
 

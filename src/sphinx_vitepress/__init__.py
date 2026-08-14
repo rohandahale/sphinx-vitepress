@@ -4,12 +4,12 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-from sphinx_vitepress import accents
+from sphinx_vitepress import accents, linkcode
 
 if TYPE_CHECKING:
     from sphinx.application import Sphinx
 
-__version__ = "0.1.3"
+__version__ = "0.1.4"
 
 
 def setup(app: Sphinx) -> dict[str, Any]:
@@ -62,6 +62,11 @@ def setup(app: Sphinx) -> dict[str, Any]:
     # Sphinx renders toctrees inline as link lists; VitePress shows the same
     # links in its sidebar. Set True to keep the inline copy as well.
     app.add_config_value("vitepress_inline_toctree", False, "html", bool)
+    # Base URL up to and including the ref, e.g.
+    # "https://github.com/you/project/blob/main". When set, every documented
+    # object gets a "source" badge linking to the exact lines defining it.
+    app.add_config_value("vitepress_source_url", "", "html", str)
+    app.connect("config-inited", linkcode.install)
 
     return {
         "version": __version__,

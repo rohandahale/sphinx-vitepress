@@ -32,37 +32,28 @@
   margin-top: 16px;
 }
 
+/* Always visible: a source link that only appears on hover reads as a
+   missing feature, and never appears at all on touch devices. */
 .docstring.custom-block .source-link {
   border: 1px solid var(--vp-c-gray-2);
   border-radius: 4px;
   text-decoration: none;
-  background-color: #414040;
   float: right;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(-5px);
-  transition: all 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+  opacity: 0.75;
+  transition: opacity 0.25s;
+}
+
+.docstring.custom-block:hover .source-link,
+.docstring.custom-block .source-link:hover {
+  opacity: 1;
 }
 
 .docstring.custom-block .source-link a {
   text-decoration: none;
-  color: #e5e5e5;
+  color: var(--vp-c-text-2);
 }
 
 .docstring.custom-block .source-link a:hover {
+  color: var(--vp-c-brand-1);
   text-decoration: underline;
-}
-
-.docstring.custom-block:hover .source-link {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-}
-
-@media (max-width: 768px) {
-  .docstring.custom-block .source-link {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-  }
 }

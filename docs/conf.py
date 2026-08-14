@@ -15,8 +15,8 @@ release = _package_version("sphinx-vitepress")
 extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.napoleon",
+    "sphinx.ext.autosummary",
     "sphinx.ext.intersphinx",
-    "sphinx.ext.linkcode",
     "myst_parser",
     "sphinx_vitepress",
 ]
@@ -42,17 +42,13 @@ else:
     }
 
 
-def linkcode_resolve(domain, info):
-    """Point each documented object at its source on GitHub."""
-    if domain != "py" or not info.get("module"):
-        return None
-    path = info["module"].replace(".", "/")
-    return f"{REPO}/blob/main/src/{path}.py"
-
-
 # -- sphinx-vitepress -------------------------------------------------------
 
 vitepress_repo = REPO
+# Each documented object links to the exact lines that define it. CI builds
+# pin the commit so a released version keeps pointing at its own code;
+# local builds track main.
+vitepress_source_url = f"{REPO}/blob/{os.environ.get('GITHUB_SHA', 'main')}"
 vitepress_footer_message = (
     'Built with <a href="https://github.com/rohandahale/sphinx-vitepress">sphinx-vitepress</a>'
 )

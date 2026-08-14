@@ -93,17 +93,43 @@ vitepress_frontmatter = {
 | `vitepress_docstring_style` | `"details"` | `"details"` renders each object as a collapsible card with a type badge; `"headings"` uses plain headings |
 | `vitepress_write_inventory` | `True` | Publish `objects.inv` at the site root |
 
-To add a *source* badge to each card, configure
-[`sphinx.ext.linkcode`](https://www.sphinx-doc.org/en/master/usage/extensions/linkcode.html):
+### Source links
+
+Point `vitepress_source_url` at your repository and every documented object
+gets a *source* badge linking to the exact lines that define it:
 
 ```python
-extensions = [..., "sphinx.ext.linkcode"]
+vitepress_source_url = "https://github.com/you/project/blob/main"
+```
 
+The value is everything up to the repository-relative path, so the ref is
+yours to choose. Pin a commit rather than a branch if the links should keep
+pointing at the code each version was built from:
 
-def linkcode_resolve(domain, info):
-    if domain != "py" or not info.get("module"):
-        return None
-    return f"https://github.com/you/project/blob/main/src/{info['module'].replace('.', '/')}.py"
+```python
+vitepress_source_url = f"https://github.com/you/project/blob/{commit_sha}"
+```
+
+The file path is worked out relative to the git working tree the source
+lives in, so it matches your repository layout with no further setup, and
+the line range comes from the object itself:
+`.../src/pkg/core.py#L42-L57`.
+
+This configures [`sphinx.ext.linkcode`](https://www.sphinx-doc.org/en/master/usage/extensions/linkcode.html)
+for you. A `linkcode_resolve` you define yourself always takes precedence.
+
+### An index of the API
+
+Sphinx has no per-page object index, but
+[`autosummary`](https://www.sphinx-doc.org/en/master/usage/extensions/autosummary.html)
+produces one, and its links resolve to the objects documented further down
+the same page:
+
+```rst
+.. autosummary::
+
+   mypkg.core.load
+   mypkg.core.Simulation
 ```
 
 ## Content handling

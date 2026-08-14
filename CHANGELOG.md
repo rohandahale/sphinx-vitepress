@@ -6,6 +6,35 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.1.4] - 2026-08-14
+
+### Added
+
+- `vitepress_source_url` gives every documented object a *source* badge
+  linking to the exact lines that define it, for example
+  `.../src/pkg/core.py#L42-L57`. Set it to everything up to the
+  repository-relative path:
+
+      vitepress_source_url = "https://github.com/you/project/blob/main"
+
+  Pin a commit instead of a branch if the links should keep pointing at
+  the code each version was built from. The file path is worked out
+  relative to the git working tree, so it matches your repository layout
+  without further configuration. This configures `sphinx.ext.linkcode`
+  for you; a `linkcode_resolve` you define yourself still wins.
+
+### Changed
+
+- Source badges are always visible. They previously appeared only on
+  hover, which read as a missing feature and never showed at all on touch
+  devices.
+
+### Fixed
+
+- `prune_virtual_page_links` and `write_inventory` were missing
+  docstrings, so `automodule` skipped them and they were absent from the
+  rendered API reference.
+
 ## [0.1.3] - 2026-08-14
 
 A review of the whole repository turned up several ways the package could
@@ -127,7 +156,8 @@ First release. A Sphinx builder that renders documentation with VitePress.
   with any section they empty, so VitePress's dead-link check stays enabled.
 - Targets VitePress 1.6.x.
 
-[Unreleased]: https://github.com/rohandahale/sphinx-vitepress/compare/v0.1.3...HEAD
+[Unreleased]: https://github.com/rohandahale/sphinx-vitepress/compare/v0.1.4...HEAD
+[0.1.4]: https://github.com/rohandahale/sphinx-vitepress/releases/tag/v0.1.4
 [0.1.3]: https://github.com/rohandahale/sphinx-vitepress/releases/tag/v0.1.3
 [0.1.2]: https://github.com/rohandahale/sphinx-vitepress/releases/tag/v0.1.2
 [0.1.1]: https://github.com/rohandahale/sphinx-vitepress/releases/tag/v0.1.1
