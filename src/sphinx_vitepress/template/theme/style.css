@@ -23,7 +23,6 @@
   --svp-blue: #4063d8;
   --svp-purple: #9558b2;
   --svp-red: #cb3c33;
-  --svp-green: #389826;
 
   --vp-c-brand: #0087d7;
   --vp-c-brand-1: #0890df;
@@ -33,11 +32,12 @@
   --vp-c-brand-dark: #5fd7ff;
   --vp-c-brand-dimm: #212425;
 
-  /* Greens */
-  --vp-dark-green: #155f3e;
-  --vp-dark-green-dark: #2b855c;
-  --vp-dark-green-light: #42d392;
-  --vp-dark-green-lighter: #35eb9a;
+  /* afmhot accents (matplotlib's 'afmhot' colormap: black -> red -> orange
+     -> yellow), replacing DocumenterVitepress's greens */
+  --svp-hot-deep: #a93000; /* afmhot ~t=0.33 */
+  --svp-hot: #e66600; /* afmhot ~t=0.45 */
+  --svp-hot-bright: #ff8000; /* afmhot  t=0.50 */
+  --svp-hot-glow: #ffb333; /* afmhot ~t=0.60 */
 
   /* Complementary colors */
   --vp-dark-gray: #1e1e1e;
@@ -84,7 +84,7 @@
   --vp-home-hero-image-background-image: linear-gradient(
     -145deg,
     #9558b282 30%,
-    #3798269a 30%,
+    #ff80009a 30%,
     #cb3d33e3
   );
   --vp-home-hero-image-filter: blur(40px);
@@ -95,32 +95,32 @@
   --vp-home-hero-name-background: -webkit-linear-gradient(
     120deg,
     var(--svp-purple) 15%,
-    var(--vp-dark-green-light),
-    var(--vp-dark-green)
+    var(--svp-hot-glow),
+    var(--svp-hot-deep)
   );
   --vp-home-hero-image-background-image: linear-gradient(
     -45deg,
-    var(--vp-dark-green) 30%,
-    var(--vp-dark-green-light),
+    var(--svp-hot-deep) 30%,
+    var(--svp-hot-bright),
     var(--vp-dark-gray) 30%
   );
   --vp-home-hero-image-filter: blur(56px);
 }
 
 :root.dark {
-  --vp-custom-block-tip-border: var(--vp-dark-green-dark);
+  --vp-custom-block-tip-border: var(--svp-hot);
   --vp-custom-block-tip-text: var(--vp-dark-subtext);
   --vp-custom-block-tip-bg: var(--vp-dark-gray-mute);
 }
 
 /* Link colors (dark mode) */
 .dark {
-  --vp-c-brand: var(--vp-dark-green-light);
-  --vp-button-brand-border: var(--vp-dark-green-lighter);
-  --vp-button-brand-bg: var(--vp-dark-green);
-  --vp-c-brand-1: var(--vp-dark-green-light);
-  --vp-c-brand-2: var(--vp-dark-green-lighter);
-  --vp-c-brand-3: var(--vp-dark-green);
+  --vp-c-brand: var(--svp-hot-bright);
+  --vp-button-brand-border: var(--svp-hot-glow);
+  --vp-button-brand-bg: var(--svp-hot-deep);
+  --vp-c-brand-1: var(--svp-hot-bright);
+  --vp-c-brand-2: var(--svp-hot-glow);
+  --vp-c-brand-3: var(--svp-hot);
 }
 
 @media (min-width: 640px) {
