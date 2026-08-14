@@ -6,6 +6,13 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-08-14
+
+### Changed
+
+- Shortened the package summary to "A Sphinx builder that renders your
+  documentation with VitePress."
+
 ## [0.1.0] - 2026-08-14
 
 First release. A Sphinx builder that renders documentation with VitePress.
@@ -58,5 +65,6 @@ First release. A Sphinx builder that renders documentation with VitePress.
   with any section they empty, so VitePress's dead-link check stays enabled.
 - Targets VitePress 1.6.x; CI also builds against the 2.0 alpha.
 
-[Unreleased]: https://github.com/rohandahale/sphinx-vitepress/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/rohandahale/sphinx-vitepress/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/rohandahale/sphinx-vitepress/releases/tag/v0.1.1
 [0.1.0]: https://github.com/rohandahale/sphinx-vitepress/releases/tag/v0.1.0
